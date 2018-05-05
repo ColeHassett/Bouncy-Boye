@@ -20,6 +20,9 @@
 		A304AFC7209D08CB00E54AD3 /* Level01.plist in Resources */ = {isa = PBXBuildFile; fileRef = A304AFC6209D08CB00E54AD3 /* Level01.plist */; };
 		A304AFC9209D119500E54AD3 /* GameState.swift in Sources */ = {isa = PBXBuildFile; fileRef = A304AFC8209D119500E54AD3 /* GameState.swift */; };
 		A304AFCB209D190E00E54AD3 /* EndGameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = A304AFCA209D190E00E54AD3 /* EndGameScene.swift */; };
+		A304AFCF209E122500E54AD3 /* dog.png in Resources */ = {isa = PBXBuildFile; fileRef = A304AFCE209E122500E54AD3 /* dog.png */; };
+		A304AFD2209E16DA00E54AD3 /* Ball.png in Resources */ = {isa = PBXBuildFile; fileRef = A304AFD0209E16DA00E54AD3 /* Ball.png */; };
+		A304AFD3209E16DA00E54AD3 /* BallSpecial.png in Resources */ = {isa = PBXBuildFile; fileRef = A304AFD1209E16DA00E54AD3 /* BallSpecial.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -38,6 +41,9 @@
 		A304AFC6209D08CB00E54AD3 /* Level01.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Level01.plist; sourceTree = "<group>"; };
 		A304AFC8209D119500E54AD3 /* GameState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameState.swift; sourceTree = "<group>"; };
 		A304AFCA209D190E00E54AD3 /* EndGameScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EndGameScene.swift; sourceTree = "<group>"; };
+		A304AFCE209E122500E54AD3 /* dog.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = dog.png; sourceTree = "<group>"; };
+		A304AFD0209E16DA00E54AD3 /* Ball.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Ball.png; sourceTree = "<group>"; };
+		A304AFD1209E16DA00E54AD3 /* BallSpecial.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = BallSpecial.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -84,6 +90,9 @@
 				A304AFC4209CFA6300E54AD3 /* GameObjectNode.swift */,
 				A304AFC8209D119500E54AD3 /* GameState.swift */,
 				A304AFCA209D190E00E54AD3 /* EndGameScene.swift */,
+				A304AFCE209E122500E54AD3 /* dog.png */,
+				A304AFD0209E16DA00E54AD3 /* Ball.png */,
+				A304AFD1209E16DA00E54AD3 /* BallSpecial.png */,
 			);
 			path = BouncyBoye;
 			sourceTree = "<group>";
@@ -120,6 +129,7 @@
 				TargetAttributes = {
 					A304AF4B209CE92E00E54AD3 = {
 						CreatedOnToolsVersion = 8.2.1;
+						DevelopmentTeam = FT5TU5KEM8;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -149,8 +159,11 @@
 			files = (
 				A304AF5B209CE92F00E54AD3 /* Main.storyboard in Resources */,
 				A304AF5D209CE92F00E54AD3 /* Images.xcassets in Resources */,
+				A304AFD3209E16DA00E54AD3 /* BallSpecial.png in Resources */,
 				A304AFC7209D08CB00E54AD3 /* Level01.plist in Resources */,
 				A304AF60209CE92F00E54AD3 /* LaunchScreen.storyboard in Resources */,
+				A304AFD2209E16DA00E54AD3 /* Ball.png in Resources */,
+				A304AFCF209E122500E54AD3 /* dog.png in Resources */,
 				A304AF54209CE92F00E54AD3 /* Actions.sks in Resources */,
 				A304AFC2209CEBA500E54AD3 /* Assets.atlas in Resources */,
 				A304AFC1209CEBA500E54AD3 /* Backgrounds in Resources */,
@@ -290,7 +303,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = FT5TU5KEM8;
 				INFOPLIST_FILE = BouncyBoye/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.cole.hassett.BouncyBoye;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -302,7 +317,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = FT5TU5KEM8;
 				INFOPLIST_FILE = BouncyBoye/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.cole.hassett.BouncyBoye;
 				PRODUCT_NAME = "$(TARGET_NAME)";

@@ -34,8 +34,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var xAcceleration: CGFloat = 0.0
     
     let PLAYER_IMAGE = "dog"
-    let POINT_ITEM_IMAGE = "Star"
-    let POINT_ITEM_SPECIAL_IMAGE = "StarSpecial"
+    let POINT_ITEM_IMAGE = "Ball"
+    let POINT_ITEM_SPECIAL_IMAGE = "BallSpecial"
     let PLATFORM_IMAGE = "Platform"
     let PLATFORM_SPECIAL_IMAGE = "PlatformBreak"
     
@@ -173,7 +173,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let playerNode = SKNode()
         playerNode.position = CGPoint(x: self.size.width / 2, y: 80.0)
         
-        let sprite = SKSpriteNode(imageNamed: "Player")
+        let sprite = SKSpriteNode(imageNamed: PLAYER_IMAGE)
+        sprite.setScale(0.35)
         playerNode.addChild(sprite)
         
         playerNode.physicsBody = SKPhysicsBody(circleOfRadius: sprite.size.width / 2)
@@ -208,7 +209,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         tapToStartNode.removeFromParent()
         player.physicsBody?.isDynamic = true
-        player.physicsBody?.applyImpulse(CGVector(dx: 0.0, dy: 20.0))
+        player.physicsBody?.applyImpulse(CGVector(dx: 0.0, dy: 100.0))
         
     }
     
