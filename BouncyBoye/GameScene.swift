@@ -39,7 +39,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     let motionManager = CMMotionManager()
     var xAcceleration: CGFloat = 0.0
     
-    let PLAYER_IMAGE = "dog"
+    let PLAYER_IMAGE = "bear"
     let POINT_ITEM_IMAGE = "Ball"
     let POINT_ITEM_SPECIAL_IMAGE = "BallSpecial"
     let PLATFORM_IMAGE = "Platform"
@@ -64,33 +64,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         foregroundNode = SKNode()
         addChild(foregroundNode)
         
-        //        let levelPlist = Bundle.main.path(forResource: "Level01", ofType: "plist")
-        //        let levelData = NSDictionary(contentsOfFile: levelPlist!)!
-        //        endLevelY = levelData["EndY"]! as! Int
-        //
-        //        let pointItems = levelData["PointItems"] as! NSDictionary
-        //        let itemPatterns = pointItems["Patterns"] as! NSDictionary
-        //        let itemPositions = pointItems["Positions"] as! [NSDictionary]
-        //
-        //        for itemPosition in itemPositions {
-        //
-        //            let patternX = itemPosition["x"] as! Float
-        //            let patternY = itemPosition["y"] as! Float
-        //            let pattern = itemPosition["pattern"] as! String
-        //            let itemPattern = itemPatterns[pattern] as! [NSDictionary]
-        //
-        //            for itemPoint in itemPattern {
-        //
-        //                let x = itemPoint["x"] as! Float
-        //                let y = itemPoint["y"] as! Float
-        //                let type = PointItemType(rawValue: itemPoint["type"] as! Int)
-        //                let positionX = CGFloat(x + patternX)
-        //                let positionY = CGFloat(y + patternY)
-        //                let pointItemNode = createPointAtPosition(position: CGPoint(x: positionX, y: positionY), type: type!)
-        //                foregroundNode.addChild(pointItemNode)
-        //            }
-        //        }
-        
         let create = SKAction.run { [unowned self] in
             self.createObjects()
         }
@@ -100,29 +73,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let repeatForever = SKAction.repeatForever(sequence)
         
         run(repeatForever)
-        
-        //        let platforms = levelData["Platforms"] as! NSDictionary
-        //        let platformPatterns = platforms["Patterns"] as! NSDictionary
-        //        let platformPositions = platforms["Positions"] as! [NSDictionary]
-        //
-        //        for position in platformPositions {
-        //
-        //            let patternX = position["x"] as! Float
-        //            let patternY = position["y"] as! Float
-        //            let pattern = position["pattern"] as! String
-        //            let platformPattern = platformPatterns[pattern] as! [NSDictionary]
-        //
-        //            for point in platformPattern {
-        //
-        //                let x = point["x"] as! Float
-        //                let y = point["y"] as! Float
-        //                let type = PlatformType(rawValue: point["type"] as! Int)
-        //                let positionX = CGFloat(x + patternX)
-        //                let positionY = CGFloat(y + patternY)
-        //                let platformNode = createPlatformAtPosition(position: CGPoint(x: positionX, y: positionY), type: type!)
-        //                foregroundNode.addChild(platformNode)
-        //            }
-        //        }
         
         player = createPlayer()
         foregroundNode.addChild(player)

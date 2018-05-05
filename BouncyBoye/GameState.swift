@@ -37,7 +37,7 @@ class GameState {
         highScore = max(score, highScore)
         let defaults = UserDefaults.standard
         defaults.set(highScore, forKey: "highScore")
-        defaults.set(score, forKey: "score")
+        defaults.set(pointItems, forKey: "pointItems")
         
         UserDefaults.standard.synchronize()
     }
