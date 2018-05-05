@@ -26,8 +26,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var previousPlatformY = 200
     var maxPlayerY: Int!
     
+    var difficultyLevel = 1
+    var nextLevelY:Double = 1000.0
+    
     var labelScore: SKLabelNode!
     var labelPointItems: SKLabelNode!
+    var labelLevel: SKLabelNode!
+    var labelJump: SKLabelNode!
     
     var gameOver = false
     
@@ -59,65 +64,65 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         foregroundNode = SKNode()
         addChild(foregroundNode)
         
-//        let levelPlist = Bundle.main.path(forResource: "Level01", ofType: "plist")
-//        let levelData = NSDictionary(contentsOfFile: levelPlist!)!
-//        endLevelY = levelData["EndY"]! as! Int
-//        
-//        let pointItems = levelData["PointItems"] as! NSDictionary
-//        let itemPatterns = pointItems["Patterns"] as! NSDictionary
-//        let itemPositions = pointItems["Positions"] as! [NSDictionary]
-//        
-//        for itemPosition in itemPositions {
-//            
-//            let patternX = itemPosition["x"] as! Float
-//            let patternY = itemPosition["y"] as! Float
-//            let pattern = itemPosition["pattern"] as! String
-//            let itemPattern = itemPatterns[pattern] as! [NSDictionary]
-//            
-//            for itemPoint in itemPattern {
-//                
-//                let x = itemPoint["x"] as! Float
-//                let y = itemPoint["y"] as! Float
-//                let type = PointItemType(rawValue: itemPoint["type"] as! Int)
-//                let positionX = CGFloat(x + patternX)
-//                let positionY = CGFloat(y + patternY)
-//                let pointItemNode = createPointAtPosition(position: CGPoint(x: positionX, y: positionY), type: type!)
-//                foregroundNode.addChild(pointItemNode)
-//            }
-//        }
+        //        let levelPlist = Bundle.main.path(forResource: "Level01", ofType: "plist")
+        //        let levelData = NSDictionary(contentsOfFile: levelPlist!)!
+        //        endLevelY = levelData["EndY"]! as! Int
+        //
+        //        let pointItems = levelData["PointItems"] as! NSDictionary
+        //        let itemPatterns = pointItems["Patterns"] as! NSDictionary
+        //        let itemPositions = pointItems["Positions"] as! [NSDictionary]
+        //
+        //        for itemPosition in itemPositions {
+        //
+        //            let patternX = itemPosition["x"] as! Float
+        //            let patternY = itemPosition["y"] as! Float
+        //            let pattern = itemPosition["pattern"] as! String
+        //            let itemPattern = itemPatterns[pattern] as! [NSDictionary]
+        //
+        //            for itemPoint in itemPattern {
+        //
+        //                let x = itemPoint["x"] as! Float
+        //                let y = itemPoint["y"] as! Float
+        //                let type = PointItemType(rawValue: itemPoint["type"] as! Int)
+        //                let positionX = CGFloat(x + patternX)
+        //                let positionY = CGFloat(y + patternY)
+        //                let pointItemNode = createPointAtPosition(position: CGPoint(x: positionX, y: positionY), type: type!)
+        //                foregroundNode.addChild(pointItemNode)
+        //            }
+        //        }
         
         let create = SKAction.run { [unowned self] in
             self.createObjects()
         }
         
-        let wait = SKAction.wait(forDuration: 0.1)
+        let wait = SKAction.wait(forDuration: 0.5)
         let sequence = SKAction.sequence([create, wait])
         let repeatForever = SKAction.repeatForever(sequence)
         
         run(repeatForever)
         
-//        let platforms = levelData["Platforms"] as! NSDictionary
-//        let platformPatterns = platforms["Patterns"] as! NSDictionary
-//        let platformPositions = platforms["Positions"] as! [NSDictionary]
-//        
-//        for position in platformPositions {
-//            
-//            let patternX = position["x"] as! Float
-//            let patternY = position["y"] as! Float
-//            let pattern = position["pattern"] as! String
-//            let platformPattern = platformPatterns[pattern] as! [NSDictionary]
-//            
-//            for point in platformPattern {
-//                
-//                let x = point["x"] as! Float
-//                let y = point["y"] as! Float
-//                let type = PlatformType(rawValue: point["type"] as! Int)
-//                let positionX = CGFloat(x + patternX)
-//                let positionY = CGFloat(y + patternY)
-//                let platformNode = createPlatformAtPosition(position: CGPoint(x: positionX, y: positionY), type: type!)
-//                foregroundNode.addChild(platformNode)
-//            }
-//        }
+        //        let platforms = levelData["Platforms"] as! NSDictionary
+        //        let platformPatterns = platforms["Patterns"] as! NSDictionary
+        //        let platformPositions = platforms["Positions"] as! [NSDictionary]
+        //
+        //        for position in platformPositions {
+        //
+        //            let patternX = position["x"] as! Float
+        //            let patternY = position["y"] as! Float
+        //            let pattern = position["pattern"] as! String
+        //            let platformPattern = platformPatterns[pattern] as! [NSDictionary]
+        //
+        //            for point in platformPattern {
+        //
+        //                let x = point["x"] as! Float
+        //                let y = point["y"] as! Float
+        //                let type = PlatformType(rawValue: point["type"] as! Int)
+        //                let positionX = CGFloat(x + patternX)
+        //                let positionY = CGFloat(y + patternY)
+        //                let platformNode = createPlatformAtPosition(position: CGPoint(x: positionX, y: positionY), type: type!)
+        //                foregroundNode.addChild(platformNode)
+        //            }
+        //        }
         
         player = createPlayer()
         foregroundNode.addChild(player)
@@ -145,15 +150,32 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         labelScore.text = "0"
         hudNode.addChild(labelScore)
         
+        
+        labelLevel = SKLabelNode(fontNamed: "ChalkboardSE-Bold")
+        labelLevel.fontSize = 30
+        labelLevel.fontColor = SKColor.magenta
+        labelLevel.position = CGPoint(x: self.size.width-20, y: self.size.height-80)
+        labelLevel.horizontalAlignmentMode = SKLabelHorizontalAlignmentMode.right
+        labelLevel.text = "lvl: \(difficultyLevel)"
+        hudNode.addChild(labelLevel)
+        
+        labelJump = SKLabelNode(fontNamed: "ChalkboardSE-Bold")
+        labelJump.fontSize = 30
+        labelJump.fontColor = SKColor.magenta
+        labelJump.position = CGPoint(x: self.size.width-20, y: self.size.height-120)
+        labelJump.horizontalAlignmentMode = SKLabelHorizontalAlignmentMode.right
+        labelJump.text = "jump: \(jumpVelocity)"
+        hudNode.addChild(labelJump)
+        
         motionManager.accelerometerUpdateInterval = 0.2
         
         motionManager.startAccelerometerUpdates()
         
-//        motionManager.startAccelerometerUpdates(to: OperationQueue.current!, withHandler: {
-//            (accelerometerData: CMAccelerometerData!, error: NSError!) in
-//            let acceleration = accelerometerData.acceleration
-//            self.xAcceleration = (CGFloat(acceleration.x)*0.75) + (self.xAcceleration * 0.25)
-//        })
+        //        motionManager.startAccelerometerUpdates(to: OperationQueue.current!, withHandler: {
+        //            (accelerometerData: CMAccelerometerData!, error: NSError!) in
+        //            let acceleration = accelerometerData.acceleration
+        //            self.xAcceleration = (CGFloat(acceleration.x)*0.75) + (self.xAcceleration * 0.25)
+        //        })
         
         hudNode.addChild(tapToStartNode)
         addChild(hudNode)
@@ -205,18 +227,22 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     func createObjects() {
         
+        let scaleDiffiulty:CGFloat = (0.1 * (CGFloat)(difficultyLevel))
         let randX = GKRandomDistribution(lowestValue: Int(self.frame.minX) + 20, highestValue: Int(self.frame.maxX) - 50)
         let xPosition = CGFloat(randX.nextInt())
         
-        let randY = GKRandomDistribution(lowestValue: previousPlatformY, highestValue: previousPlatformY+50)
+        let randY = GKRandomDistribution(lowestValue: previousPlatformY + (Int)((0.1 + scaleDiffiulty) * jumpVelocity), highestValue: previousPlatformY + (Int)((0.30 + scaleDiffiulty) * jumpVelocity))
         let yPosition = CGFloat(randY.nextInt())
         
-        let randomType = randomNumber(probabilities: [0.9, 0.1])
+        previousPlatformY = Int(yPosition)
+        
+        // difficulty level dtermines likelyhood of breakable platforms
+        let randomType = randomNumber(probabilities: [Double(1 - scaleDiffiulty), Double(scaleDiffiulty)])
         let type = PlatformType(rawValue: randomType)
         
         let platformNode = createPlatformAtPosition(position: CGPoint(x: xPosition, y: yPosition), type: type!)
         foregroundNode.addChild(platformNode)
-        previousPlatformY += 50
+        
         
     }
     
@@ -334,6 +360,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             GameState.sharedInstance.score += Int(player.position.y) - maxPlayerY!
             maxPlayerY = Int(player.position.y)
             labelScore.text = "\(GameState.sharedInstance.score)"
+            labelLevel.text = "lvl: \(difficultyLevel)"
+            labelJump.text = "jump: \(jumpVelocity)"
         }
         
         foregroundNode.enumerateChildNodes(withName: "NODE_PLATFORM", using: {
@@ -356,6 +384,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         if Int(player.position.y) < maxPlayerY - 800 {
             endGame()
+        }
+        
+        // increase difficulty when player reaches nextLevelY
+        if ((Double)(maxPlayerY) > nextLevelY && difficultyLevel < 10) {
+            difficultyLevel += 1
+            nextLevelY += (Double)(difficultyLevel * 1000)
+            jumpVelocity += 30.0
         }
         
     }

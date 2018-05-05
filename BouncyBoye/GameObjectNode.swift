@@ -8,6 +8,8 @@
 
 import SpriteKit
 
+var jumpVelocity:CGFloat = 250.0
+
 struct CollisionCategoryBitmask {
     static let Player: UInt32 = 0x00
     static let PointItem: UInt32 = 0x01
@@ -25,7 +27,7 @@ enum PlatformType: Int {
 }
 
 class GameObjectNode: SKNode {
-
+    
     func collisionWithPlayer(player: SKNode) -> Bool {
         
         return false
@@ -37,7 +39,6 @@ class GameObjectNode: SKNode {
         if playerY > self.position.y + 300.0 {
             self.removeFromParent()
         }
-        
     }
     
 }
@@ -66,7 +67,7 @@ class PlatformNode: GameObjectNode {
         
         if (player.physicsBody?.velocity.dy)! < 0 {
             
-            player.physicsBody?.velocity = CGVector(dx: player.physicsBody!.velocity.dx, dy: 250.0)
+            player.physicsBody?.velocity = CGVector(dx: player.physicsBody!.velocity.dx, dy: jumpVelocity)
             
             if platformType == .Break {
                 self.removeFromParent()
@@ -76,3 +77,4 @@ class PlatformNode: GameObjectNode {
         return false
     }
 }
+
