@@ -49,7 +49,7 @@ class PointNode: GameObjectNode {
     
     override func collisionWithPlayer(player: SKNode) -> Bool {
         
-        player.physicsBody?.velocity = CGVector(dx: player.physicsBody!.velocity.dx, dy: 400.0)
+//        player.physicsBody?.velocity = CGVector(dx: player.physicsBody!.velocity.dx, dy: 400.0)
         self.removeFromParent()
         GameState.sharedInstance.score += (pointItemType == .Normal ? 20 : 100)
         GameState.sharedInstance.pointItems += (pointItemType == .Normal ? 1 : 5)

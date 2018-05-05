@@ -17,7 +17,7 @@ class EndGameScene: SKScene {
     override init(size: CGSize) {
         super.init(size: size)
         
-        let pointItem = SKSpriteNode(imageNamed: "Star")
+        let pointItem = SKSpriteNode(imageNamed: "Ball")
         pointItem.position = CGPoint(x: 25, y: self.size.height-30)
         addChild(pointItem)
         

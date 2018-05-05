@@ -24,6 +24,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     var endLevelY = 0
     var previousPlatformY = 200
+    var previousPointsY = 300
     var maxPlayerY: Int!
     
     var difficultyLevel = 1
@@ -39,7 +40,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     let motionManager = CMMotionManager()
     var xAcceleration: CGFloat = 0.0
     
-    let PLAYER_IMAGE = "bear"
+    let PLAYER_IMAGE = "dog"
     let POINT_ITEM_IMAGE = "Ball"
     let POINT_ITEM_SPECIAL_IMAGE = "BallSpecial"
     let PLATFORM_IMAGE = "Platform"
@@ -65,7 +66,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         addChild(foregroundNode)
         
         let create = SKAction.run { [unowned self] in
-            self.createObjects()
+            self.createPlatforms()
+            self.createPointItems()
         }
         
         let wait = SKAction.wait(forDuration: 0.5)
@@ -99,23 +101,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         labelScore.horizontalAlignmentMode = SKLabelHorizontalAlignmentMode.right
         labelScore.text = "0"
         hudNode.addChild(labelScore)
-        
-        
-        labelLevel = SKLabelNode(fontNamed: "ChalkboardSE-Bold")
-        labelLevel.fontSize = 30
-        labelLevel.fontColor = SKColor.magenta
-        labelLevel.position = CGPoint(x: self.size.width-20, y: self.size.height-80)
-        labelLevel.horizontalAlignmentMode = SKLabelHorizontalAlignmentMode.right
-        labelLevel.text = "lvl: \(difficultyLevel)"
-        hudNode.addChild(labelLevel)
-        
-        labelJump = SKLabelNode(fontNamed: "ChalkboardSE-Bold")
-        labelJump.fontSize = 30
-        labelJump.fontColor = SKColor.magenta
-        labelJump.position = CGPoint(x: self.size.width-20, y: self.size.height-120)
-        labelJump.horizontalAlignmentMode = SKLabelHorizontalAlignmentMode.right
-        labelJump.text = "jump: \(jumpVelocity)"
-        hudNode.addChild(labelJump)
         
         motionManager.accelerometerUpdateInterval = 0.2
         
@@ -175,7 +160,26 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         return playerNode
     }
     
-    func createObjects() {
+    func createPointItems() {
+        
+        let randX = GKRandomDistribution(lowestValue: Int(self.frame.minX) + 20, highestValue: Int(self.frame.maxX) - 80)
+        let randY = GKRandomDistribution(lowestValue: previousPointsY, highestValue: previousPointsY + 500)
+        let randPointsInArea = Int(arc4random_uniform(5))
+        
+        for _ in 0...randPointsInArea {
+            let randomType = randomNumber(probabilities: [0.8, 0.2])
+            let type = PointItemType(rawValue: randomType)
+            let yPosition = CGFloat(randY.nextInt())
+            let xPosition = CGFloat(randX.nextInt())
+            let pointItemNode = createPointAtPosition(position: CGPoint(x: xPosition, y: yPosition), type: type!)
+            foregroundNode.addChild(pointItemNode)
+        }
+        
+        previousPointsY += 500
+        
+    }
+    
+    func createPlatforms() {
         
         let scaleDiffiulty:CGFloat = (0.1 * (CGFloat)(difficultyLevel))
         let randX = GKRandomDistribution(lowestValue: Int(self.frame.minX) + 20, highestValue: Int(self.frame.maxX) - 50)
@@ -192,7 +196,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         let platformNode = createPlatformAtPosition(position: CGPoint(x: xPosition, y: yPosition), type: type!)
         foregroundNode.addChild(platformNode)
-        
         
     }
     
@@ -231,7 +234,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         tapToStartNode.removeFromParent()
         player.physicsBody?.isDynamic = true
-        player.physicsBody?.applyImpulse(CGVector(dx: 0.0, dy: 30.0))
+        player.physicsBody?.applyImpulse(CGVector(dx: 0.0, dy: 35.0))
         
     }
     
@@ -250,6 +253,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         else {
             sprite = SKSpriteNode(imageNamed: POINT_ITEM_IMAGE)
         }
+        sprite.setScale(1.5)
         node.addChild(sprite)
         node.physicsBody = SKPhysicsBody(circleOfRadius: sprite.size.width / 2)
         node.physicsBody?.isDynamic = false
@@ -310,8 +314,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             GameState.sharedInstance.score += Int(player.position.y) - maxPlayerY!
             maxPlayerY = Int(player.position.y)
             labelScore.text = "\(GameState.sharedInstance.score)"
-            labelLevel.text = "lvl: \(difficultyLevel)"
-            labelJump.text = "jump: \(jumpVelocity)"
         }
         
         foregroundNode.enumerateChildNodes(withName: "NODE_PLATFORM", using: {
