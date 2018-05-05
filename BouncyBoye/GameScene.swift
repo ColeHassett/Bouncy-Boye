@@ -74,16 +74,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         foregroundNode = SKNode()
         addChild(foregroundNode)
         
-        let create = SKAction.run { [unowned self] in
-            self.createPlatforms()
-            self.createPointItems()
-        }
-        
-        let wait = SKAction.wait(forDuration: 0.5)
-        let sequence = SKAction.sequence([create, wait])
-        let repeatForever = SKAction.repeatForever(sequence)
-        
-        run(repeatForever)
+        createGamePieces()
         
         player = createPlayer()
         foregroundNode.addChild(player)
@@ -145,6 +136,21 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
     }
     
+    func createGamePieces() {
+    
+        let create = SKAction.run { [unowned self] in
+            self.createPlatforms()
+            self.createPointItems()
+        }
+        
+        let wait = SKAction.wait(forDuration: 0.1)
+        let sequence = SKAction.sequence([create, wait])
+        let repeatSequence = SKAction.repeat(sequence, count: 5)
+        
+        run(repeatSequence)
+    
+    }
+    
     func createPlayer() -> SKNode {
         let playerNode = SKNode()
         playerNode.position = CGPoint(x: self.size.width / 2, y: 80.0)
@@ -172,7 +178,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         let randX = GKRandomDistribution(lowestValue: Int(self.frame.minX) + 20, highestValue: Int(self.frame.maxX) - 80)
         let randY = GKRandomDistribution(lowestValue: previousPointsY, highestValue: previousPointsY + 500)
-        let randPointsInArea = Int(arc4random_uniform(5))
+        let randPointsInArea = Int(arc4random_uniform(6))
         
         for _ in 0...randPointsInArea {
             let randomType = randomNumber(probabilities: [0.8, 0.2])
@@ -384,6 +390,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         if ((Double)(previousPlatformY) > nextNodeLevelY && nodeLevel < 10) {
             nodeLevel += 1
             nextNodeLevelY += (Double)(nodeLevel * 1000)
+        }
+        
+        if Int(player.position.y + 500.0) >= previousPlatformY || Int(player.position.y + 500.0) >= previousPointsY {
+            
+            createGamePieces()
+            
         }
         
     }
