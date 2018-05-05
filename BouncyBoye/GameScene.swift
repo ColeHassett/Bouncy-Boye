@@ -27,6 +27,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var previousPointsY = 300
     var maxPlayerY: Int!
     
+    var nodeLevel = 1
+    var nextNodeLevelY = 1000.0
     var difficultyLevel = 1
     var nextLevelY:Double = 1000.0
     
@@ -56,8 +58,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         maxPlayerY = 80
         GameState.sharedInstance.score = 0
         gameOver = false
+        nodeLevel = 1
+        nextNodeLevelY = 1000.0
+        difficultyLevel = 1
+        nextLevelY = 1000.0
         
-        backgroundColor = SKColor.white
+        
+        backgroundColor = SKColor.black
         scaleFactor = self.size.width / 320
         backgroundNode = createBackgroundNode()
         addChild(backgroundNode)
@@ -181,17 +188,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     func createPlatforms() {
         
-        let scaleDiffiulty:CGFloat = (0.1 * (CGFloat)(difficultyLevel))
+        let scaleDifficulty:CGFloat = (0.1 * (CGFloat)(nodeLevel))
         let randX = GKRandomDistribution(lowestValue: Int(self.frame.minX) + 20, highestValue: Int(self.frame.maxX) - 50)
         let xPosition = CGFloat(randX.nextInt())
         
-        let randY = GKRandomDistribution(lowestValue: previousPlatformY + (Int)((0.1 + scaleDiffiulty) * jumpVelocity), highestValue: previousPlatformY + (Int)((0.30 + scaleDiffiulty) * jumpVelocity))
+        let randY = GKRandomDistribution(lowestValue: previousPlatformY + (Int)((0.1 + scaleDifficulty) * jumpVelocity), highestValue: previousPlatformY + (Int)((0.30 + scaleDifficulty) * jumpVelocity))
         let yPosition = CGFloat(randY.nextInt())
         
         previousPlatformY = Int(yPosition)
         
         // difficulty level dtermines likelyhood of breakable platforms
-        let randomType = randomNumber(probabilities: [Double(1 - scaleDiffiulty), Double(scaleDiffiulty)])
+        let randomType = randomNumber(probabilities: [Double(1 - scaleDifficulty), Double(scaleDifficulty)])
         let type = PlatformType(rawValue: randomType)
         
         let platformNode = createPlatformAtPosition(position: CGPoint(x: xPosition, y: yPosition), type: type!)
@@ -343,6 +350,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             difficultyLevel += 1
             nextLevelY += (Double)(difficultyLevel * 1000)
             jumpVelocity += 30.0
+        }
+        
+        // increase node create difficulty
+        if ((Double)(previousPlatformY) > nextNodeLevelY && nodeLevel < 10) {
+            nodeLevel += 1
+            nextNodeLevelY += (Double)(nodeLevel * 1000)
         }
         
     }
