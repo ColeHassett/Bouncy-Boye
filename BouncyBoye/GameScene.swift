@@ -42,11 +42,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     let motionManager = CMMotionManager()
     var xAcceleration: CGFloat = 0.0
     
-    let PLAYER_IMAGE = "dog"
-    let POINT_ITEM_IMAGE = "Ball"
-    let POINT_ITEM_SPECIAL_IMAGE = "BallSpecial"
-    let PLATFORM_IMAGE = "Platform"
-    let PLATFORM_SPECIAL_IMAGE = "PlatformBreak"
+    var PLAYER_IMAGE = "dog"
+    var POINT_ITEM_IMAGE = "Ball"
+    var POINT_ITEM_SPECIAL_IMAGE = "BallSpecial"
+    var PLATFORM_IMAGE = "ground_sand"
+    var PLATFORM_SPECIAL_IMAGE = "ground_sand_broken"
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -55,6 +55,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     override init(size: CGSize) {
         super.init(size: size)
         
+        print("init")
+        
         maxPlayerY = 80
         GameState.sharedInstance.score = 0
         gameOver = false
@@ -62,7 +64,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         nextNodeLevelY = 1000.0
         difficultyLevel = 1
         nextLevelY = 1000.0
-        
+        jumpVelocity = 250.0
         
         backgroundColor = SKColor.black
         scaleFactor = self.size.width / 320
@@ -187,6 +189,31 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     func createPlatforms() {
         
+        switch (nodeLevel) {
+        case 1,2:
+            PLATFORM_IMAGE = "ground_sand"
+            PLATFORM_SPECIAL_IMAGE = "ground_sand_broken"
+            break
+        case 3,4:
+            PLATFORM_IMAGE = "ground_grass"
+            PLATFORM_SPECIAL_IMAGE = "ground_grass_broken"
+            break
+        case 5,6:
+            PLATFORM_IMAGE = "ground_wood"
+            PLATFORM_SPECIAL_IMAGE = "ground_wood_broken"
+            break
+        case 7,8:
+            PLATFORM_IMAGE = "ground_stone"
+            PLATFORM_SPECIAL_IMAGE = "ground_stone_broken"
+            break
+        case _ where nodeLevel > 8:
+            PLATFORM_IMAGE = "ground_snow"
+            PLATFORM_SPECIAL_IMAGE = "ground_snow_broken"
+            break
+        default:
+            break
+        }
+        
         let scaleDifficulty:CGFloat = (0.1 * (CGFloat)(nodeLevel))
         let randX = GKRandomDistribution(lowestValue: Int(self.frame.minX) + 20, highestValue: Int(self.frame.maxX) - 50)
         let xPosition = CGFloat(randX.nextInt())
@@ -285,6 +312,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         else {
             sprite = SKSpriteNode(imageNamed: PLATFORM_IMAGE)
         }
+        sprite.setScale(0.2)
         node.addChild(sprite)
         
         node.physicsBody = SKPhysicsBody(rectangleOf: sprite.size)
@@ -320,6 +348,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             GameState.sharedInstance.score += Int(player.position.y) - maxPlayerY!
             maxPlayerY = Int(player.position.y)
             labelScore.text = "\(GameState.sharedInstance.score)"
+            labelLevel.text = "\(difficultyLevel)"
         }
         
         foregroundNode.enumerateChildNodes(withName: "NODE_PLATFORM", using: {
