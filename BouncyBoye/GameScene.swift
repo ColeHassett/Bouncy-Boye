@@ -23,6 +23,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var scaleFactor: CGFloat!
     
     var endLevelY = 0
+    var previousPlatformY = 200
     var maxPlayerY: Int!
     
     var labelScore: SKLabelNode!
@@ -55,58 +56,68 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         backgroundNode = createBackgroundNode()
         addChild(backgroundNode)
         
-        let levelPlist = Bundle.main.path(forResource: "Level01", ofType: "plist")
-        let levelData = NSDictionary(contentsOfFile: levelPlist!)!
-        endLevelY = levelData["EndY"]! as! Int
-        
         foregroundNode = SKNode()
         addChild(foregroundNode)
         
-        let pointItems = levelData["PointItems"] as! NSDictionary
-        let itemPatterns = pointItems["Patterns"] as! NSDictionary
-        let itemPositions = pointItems["Positions"] as! [NSDictionary]
+//        let levelPlist = Bundle.main.path(forResource: "Level01", ofType: "plist")
+//        let levelData = NSDictionary(contentsOfFile: levelPlist!)!
+//        endLevelY = levelData["EndY"]! as! Int
+//        
+//        let pointItems = levelData["PointItems"] as! NSDictionary
+//        let itemPatterns = pointItems["Patterns"] as! NSDictionary
+//        let itemPositions = pointItems["Positions"] as! [NSDictionary]
+//        
+//        for itemPosition in itemPositions {
+//            
+//            let patternX = itemPosition["x"] as! Float
+//            let patternY = itemPosition["y"] as! Float
+//            let pattern = itemPosition["pattern"] as! String
+//            let itemPattern = itemPatterns[pattern] as! [NSDictionary]
+//            
+//            for itemPoint in itemPattern {
+//                
+//                let x = itemPoint["x"] as! Float
+//                let y = itemPoint["y"] as! Float
+//                let type = PointItemType(rawValue: itemPoint["type"] as! Int)
+//                let positionX = CGFloat(x + patternX)
+//                let positionY = CGFloat(y + patternY)
+//                let pointItemNode = createPointAtPosition(position: CGPoint(x: positionX, y: positionY), type: type!)
+//                foregroundNode.addChild(pointItemNode)
+//            }
+//        }
         
-        for itemPosition in itemPositions {
-            
-            let patternX = itemPosition["x"] as! Float
-            let patternY = itemPosition["y"] as! Float
-            let pattern = itemPosition["pattern"] as! String
-            let itemPattern = itemPatterns[pattern] as! [NSDictionary]
-            
-            for itemPoint in itemPattern {
-                
-                let x = itemPoint["x"] as! Float
-                let y = itemPoint["y"] as! Float
-                let type = PointItemType(rawValue: itemPoint["type"] as! Int)
-                let positionX = CGFloat(x + patternX)
-                let positionY = CGFloat(y + patternY)
-                let pointItemNode = createPointAtPosition(position: CGPoint(x: positionX, y: positionY), type: type!)
-                foregroundNode.addChild(pointItemNode)
-            }
+        let create = SKAction.run { [unowned self] in
+            self.createObjects()
         }
         
-        let platforms = levelData["Platforms"] as! NSDictionary
-        let platformPatterns = platforms["Patterns"] as! NSDictionary
-        let platformPositions = platforms["Positions"] as! [NSDictionary]
+        let wait = SKAction.wait(forDuration: 0.1)
+        let sequence = SKAction.sequence([create, wait])
+        let repeatForever = SKAction.repeatForever(sequence)
         
-        for position in platformPositions {
-            
-            let patternX = position["x"] as! Float
-            let patternY = position["y"] as! Float
-            let pattern = position["pattern"] as! String
-            let platformPattern = platformPatterns[pattern] as! [NSDictionary]
-            
-            for point in platformPattern {
-                
-                let x = point["x"] as! Float
-                let y = point["y"] as! Float
-                let type = PlatformType(rawValue: point["type"] as! Int)
-                let positionX = CGFloat(x + patternX)
-                let positionY = CGFloat(y + patternY)
-                let platformNode = createPlatformAtPosition(position: CGPoint(x: positionX, y: positionY), type: type!)
-                foregroundNode.addChild(platformNode)
-            }
-        }
+        run(repeatForever)
+        
+//        let platforms = levelData["Platforms"] as! NSDictionary
+//        let platformPatterns = platforms["Patterns"] as! NSDictionary
+//        let platformPositions = platforms["Positions"] as! [NSDictionary]
+//        
+//        for position in platformPositions {
+//            
+//            let patternX = position["x"] as! Float
+//            let patternY = position["y"] as! Float
+//            let pattern = position["pattern"] as! String
+//            let platformPattern = platformPatterns[pattern] as! [NSDictionary]
+//            
+//            for point in platformPattern {
+//                
+//                let x = point["x"] as! Float
+//                let y = point["y"] as! Float
+//                let type = PlatformType(rawValue: point["type"] as! Int)
+//                let positionX = CGFloat(x + patternX)
+//                let positionY = CGFloat(y + patternY)
+//                let platformNode = createPlatformAtPosition(position: CGPoint(x: positionX, y: positionY), type: type!)
+//                foregroundNode.addChild(platformNode)
+//            }
+//        }
         
         player = createPlayer()
         foregroundNode.addChild(player)
@@ -192,6 +203,41 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         return playerNode
     }
     
+    func createObjects() {
+        
+        let randX = GKRandomDistribution(lowestValue: Int(self.frame.minX) + 20, highestValue: Int(self.frame.maxX) - 50)
+        let xPosition = CGFloat(randX.nextInt())
+        
+        let randY = GKRandomDistribution(lowestValue: previousPlatformY, highestValue: previousPlatformY+50)
+        let yPosition = CGFloat(randY.nextInt())
+        
+        let randomType = randomNumber(probabilities: [0.9, 0.1])
+        let type = PlatformType(rawValue: randomType)
+        
+        let platformNode = createPlatformAtPosition(position: CGPoint(x: xPosition, y: yPosition), type: type!)
+        foregroundNode.addChild(platformNode)
+        previousPlatformY += 50
+        
+    }
+    
+    func randomNumber(probabilities: [Double]) -> Int {
+        
+        let sum = probabilities.reduce(0, +)
+        let rnd = sum * Double(arc4random_uniform(UInt32.max)) / Double(UInt32.max)
+        
+        var accum = 0.0
+        
+        for (i, p) in probabilities.enumerated() {
+            accum += p
+            if rnd < accum {
+                return i
+            }
+        }
+        
+        return (probabilities.count - 1)
+        
+    }
+    
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         
         if player.physicsBody!.isDynamic {
@@ -209,7 +255,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         tapToStartNode.removeFromParent()
         player.physicsBody?.isDynamic = true
-        player.physicsBody?.applyImpulse(CGVector(dx: 0.0, dy: 100.0))
+        player.physicsBody?.applyImpulse(CGVector(dx: 0.0, dy: 30.0))
         
     }
     
@@ -311,6 +357,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         if Int(player.position.y) < maxPlayerY - 800 {
             endGame()
         }
+        
     }
     
     func endGame() {
