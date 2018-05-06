@@ -31,6 +31,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var previousPlatformY = 200
     var previousPointsY = 300
     var previousFlareY = 200
+    var previousEnemyY = 1000
     var maxPlayerY: Int!
     
     var nodeLevel = 1
@@ -58,6 +59,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var PLATFORM_IMAGE = "ground_sand"
     var PLATFORM_SPECIAL_IMAGE = "ground_sand_broken"
     var SIDE_FLARE_IMAGE = "cactus"
+    var ENEMY_IMAGE = "spinner"
     
     // Required Init
     required init?(coder aDecoder: NSCoder) {
@@ -188,6 +190,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let create = SKAction.run { [unowned self] in
             self.createPlatforms()
             self.createPointItems()
+            self.createEnemy()
             let newBackNode = self.createBackgroundNode()
             self.backgroundNode.addChild(newBackNode)
             let newMidNode = self.createMidgroundNode()
@@ -225,6 +228,30 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         playerNode.physicsBody?.contactTestBitMask = CollisionCategoryBitmask.PointItem | CollisionCategoryBitmask.Platform
         
         return playerNode
+    }
+    
+    func createEnemy() {
+        
+    
+        let randX = GKRandomDistribution(lowestValue: Int(self.frame.minX) + 40, highestValue: Int(self.frame.maxX) - 100)
+        let randY = GKRandomDistribution(lowestValue: previousEnemyY, highestValue: previousEnemyY + 500)
+        
+        let yPosition = randY.nextInt()
+        previousEnemyY += yPosition
+        
+        let node = SKNode()
+        let thePosition = CGPoint(x: randX.nextInt(), y: yPosition)
+        node.position = thePosition
+        
+        let sprite = SKSpriteNode(imageNamed: ENEMY_IMAGE)
+        sprite.setScale(0.8)
+        node.addChild(sprite)
+        node.physicsBody = SKPhysicsBody(circleOfRadius: sprite.size.width / 2)
+        node.physicsBody?.isDynamic = false
+        node.name = "NODE_ENEMY"
+        
+        foregroundNode.addChild(node)
+    
     }
     
     // Create a random number of point items between 0 and 5 in a 500 height range
@@ -373,6 +400,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     // When player makes contact with a GameObject perform an action and check to see what object it was
     // If the object is a point item, reflect that in the score/UI
     func didBegin(_ contact: SKPhysicsContact) {
+        
+        if (contact.bodyA.node?.name == "NODE_ENEMY" || contact.bodyB.node?.name == "NODE_ENEMY") {
+            endGame()
+            return
+        }
         
         var updateHUD = false
         let whichNode = (contact.bodyA.node != player) ? contact.bodyA.node : contact.bodyB.node
