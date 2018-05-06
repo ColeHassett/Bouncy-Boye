@@ -28,10 +28,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var endLevelY = 0
     var previousPlatformY = 200
     var previousPointsY = 300
+    var previousFlareY = 200
     var maxPlayerY: Int!
     
     var nodeLevel = 1
     var nextNodeLevelY = 1000.0
+    var flareLevel = 1
+    var nextFlareLevelY = 1000.0
     var difficultyLevel = 1
     var nextLevelY:Double = 1000.0
     
@@ -76,8 +79,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         backgroundColor = SKColor.black
         scaleFactor = self.size.width / 320
-        backgroundNode = createBackgroundNode()
+        
+        backgroundNode = SKNode()
         addChild(backgroundNode)
+        
+        midgroundNode = SKNode()
+        addChild(midgroundNode)
         
         foregroundNode = SKNode()
         addChild(foregroundNode)
@@ -126,6 +133,38 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         physicsWorld.contactDelegate = self
     }
     
+    // Create a node to be used in the midground
+    // Returns SKNode
+    func createMidgroundNode() -> SKNode {
+        
+        let midgroundNode = SKNode()
+        let sprite = SKSpriteNode(imageNamed: SIDE_FLARE_IMAGE)
+        var anchor: CGPoint!
+        var xPosition: CGFloat!
+        previousFlareY += Int(100+arc4random_uniform(101))
+        
+        let r = arc4random_uniform(2)
+        if r > 0 {
+            sprite.zRotation = CGFloat(M_PI_2)
+            anchor = CGPoint(x: 1.0, y: 0.5)
+            xPosition = self.size.width - (sprite.size.height / 2)
+        }
+        else {
+            sprite.zRotation = CGFloat(-M_PI_2)
+            anchor = CGPoint(x: 0.0, y: 0.5)
+            xPosition = 0.0 + (sprite.size.height / 2)
+        }
+        
+        sprite.anchorPoint = anchor
+        sprite.position = CGPoint(x: xPosition, y: CGFloat(previousFlareY))
+        midgroundNode.addChild(sprite)
+        
+        return midgroundNode
+        
+    }
+    
+    // Create a node to be used in the background
+    // Returns SKNode
     func createBackgroundNode() -> SKNode {
         
         let backgroundNode = SKNode()
@@ -147,8 +186,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let create = SKAction.run { [unowned self] in
             self.createPlatforms()
             self.createPointItems()
-            let newNode = self.createBackgroundNode()
-            self.backgroundNode.addChild(newNode)
+            let newBackNode = self.createBackgroundNode()
+            self.backgroundNode.addChild(newBackNode)
+            let newMidNode = self.createMidgroundNode()
+            self.midgroundNode.addChild(newMidNode)
         }
         
         let wait = SKAction.wait(forDuration: 0.1)
@@ -188,8 +229,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     func createPointItems() {
         
         let randX = GKRandomDistribution(lowestValue: Int(self.frame.minX) + 20, highestValue: Int(self.frame.maxX) - 80)
-        let randY = GKRandomDistribution(lowestValue: previousPointsY, highestValue: previousPointsY + 500)
-        let randPointsInArea = Int(arc4random_uniform(6))
+        let randY = GKRandomDistribution(lowestValue: previousPointsY, highestValue: previousPointsY + 100)
+        let randPointsInArea = Int(arc4random_uniform(2))
         
         for _ in 0...randPointsInArea {
             let randomType = randomNumber(probabilities: [0.8, 0.2])
@@ -200,7 +241,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             foregroundNode.addChild(pointItemNode)
         }
         
-        previousPointsY += 500
+        previousPointsY += 100
         
     }
     
@@ -208,7 +249,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     func createPlatforms() {
         
         let scaleDifficulty:CGFloat = (0.1 * (CGFloat)(nodeLevel))
-        let randX = GKRandomDistribution(lowestValue: Int(self.frame.minX) + 20, highestValue: Int(self.frame.maxX) - 50)
+        let randX = GKRandomDistribution(lowestValue: Int(self.frame.minX) + 40, highestValue: Int(self.frame.maxX) - 100)
         let xPosition = CGFloat(randX.nextInt())
         
         let randY = GKRandomDistribution(lowestValue: previousPlatformY + (Int)((0.1 + scaleDifficulty) * jumpVelocity), highestValue: previousPlatformY + (Int)((0.3 + scaleDifficulty) * jumpVelocity))
@@ -355,7 +396,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             GameState.sharedInstance.score += Int(player.position.y) - maxPlayerY!
             maxPlayerY = Int(player.position.y)
             labelScore.text = "\(GameState.sharedInstance.score)"
-            labelLevel.text = "\(difficultyLevel)"
         }
         
         foregroundNode.enumerateChildNodes(withName: "NODE_PLATFORM", using: {
@@ -373,6 +413,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         if player.position.y > 200.0 {
             
             backgroundNode.position = CGPoint(x: 0.0, y: -((player.position.y - 200.0) / 10))
+            midgroundNode.position = CGPoint(x: 0.0, y: -((player.position.y - 200.0)))
             foregroundNode.position = CGPoint(x: 0.0, y: -(player.position.y - 200.0))
         }
         
@@ -391,6 +432,58 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         if ((Double)(previousPlatformY) > nextNodeLevelY && nodeLevel < 10) {
             nodeLevel += 1
             nextNodeLevelY += (Double)(nodeLevel * 1000)
+            
+            // Set images for game pieces based on level
+            switch (nodeLevel) {
+            case 1,2:
+                PLATFORM_IMAGE = "ground_sand"
+                PLATFORM_SPECIAL_IMAGE = "ground_sand_broken"
+                break
+            case 3,4:
+                PLATFORM_IMAGE = "ground_grass"
+                PLATFORM_SPECIAL_IMAGE = "ground_grass_broken"
+                break
+            case 5,6:
+                PLATFORM_IMAGE = "ground_wood"
+                PLATFORM_SPECIAL_IMAGE = "ground_wood_broken"
+                break
+            case 7,8:
+                PLATFORM_IMAGE = "ground_stone"
+                PLATFORM_SPECIAL_IMAGE = "ground_stone_broken"
+                break
+            case _ where nodeLevel > 8:
+                PLATFORM_IMAGE = "ground_snow"
+                PLATFORM_SPECIAL_IMAGE = "ground_snow_broken"
+                break
+            default:
+                break
+            }
+        }
+        
+        // change flare of midground
+        if ((Double)(previousFlareY) > nextFlareLevelY && flareLevel < 10) {
+            flareLevel += 1
+            nextFlareLevelY += (Double)(flareLevel * 1000)
+            
+            switch (flareLevel) {
+            case 1,2:
+                SIDE_FLARE_IMAGE = "cactus"
+                break
+            case 3,4:
+                SIDE_FLARE_IMAGE = "grass"
+                break
+            case 5,6:
+                SIDE_FLARE_IMAGE = "branch"
+                break
+            case 7,8:
+                SIDE_FLARE_IMAGE = "grass_brown"
+                break
+            case _ where flareLevel > 8:
+                SIDE_FLARE_IMAGE = "spike"
+                break
+            default:
+                break
+            }
         }
         
         // If the player is approaching the top of generated objects, generate more
@@ -398,36 +491,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             createGamePieces()
         }
         
-        // Set images for game pieces based on level
-        switch (nodeLevel) {
-        case 1,2:
-            PLATFORM_IMAGE = "ground_sand"
-            PLATFORM_SPECIAL_IMAGE = "ground_sand_broken"
-            SIDE_FLARE_IMAGE = "cactus"
-            break
-        case 3,4:
-            PLATFORM_IMAGE = "ground_grass"
-            PLATFORM_SPECIAL_IMAGE = "ground_grass_broken"
-            SIDE_FLARE_IMAGE = "grass"
-            break
-        case 5,6:
-            PLATFORM_IMAGE = "ground_wood"
-            PLATFORM_SPECIAL_IMAGE = "ground_wood_broken"
-            SIDE_FLARE_IMAGE = "grass_brown"
-            break
-        case 7,8:
-            PLATFORM_IMAGE = "ground_stone"
-            PLATFORM_SPECIAL_IMAGE = "ground_stone_broken"
-            SIDE_FLARE_IMAGE = "cactus"
-            break
-        case _ where nodeLevel > 8:
-            PLATFORM_IMAGE = "ground_snow"
-            PLATFORM_SPECIAL_IMAGE = "ground_snow_broken"
-            SIDE_FLARE_IMAGE = "spike"
-            break
-        default:
-            break
-        }
+        
         
     }
     
