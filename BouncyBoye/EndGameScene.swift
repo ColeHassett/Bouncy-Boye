@@ -10,10 +10,12 @@ import SpriteKit
 
 class EndGameScene: SKScene {
     
+    // Required init
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
     
+    // Init to show empty screen with labels showing score, currency, high score, and restart
     override init(size: CGSize) {
         super.init(size: size)
         
@@ -57,6 +59,7 @@ class EndGameScene: SKScene {
         
     }
     
+    // Restart the game when user touches screen
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         
         let reveal = SKTransition.fade(withDuration: 0.5)

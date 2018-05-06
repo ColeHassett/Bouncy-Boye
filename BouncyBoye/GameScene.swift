@@ -12,14 +12,17 @@ import CoreMotion
 
 class GameScene: SKScene, SKPhysicsContactDelegate {
     
+    // Commonly Used Nodes
     var backgroundNode: SKNode!
     var midgroundNode: SKNode!
     var foregroundNode: SKNode!
     var hudNode: SKNode!
     var player: SKNode!
     
+    // Node for tap to start image
     let tapToStartNode = SKSpriteNode(imageNamed: "TapToStart")
     
+    // Initialization of class variables
     var scaleFactor: CGFloat!
     
     var endLevelY = 0
@@ -39,9 +42,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     var gameOver = false
     
+    // Accelerometer
     let motionManager = CMMotionManager()
     var xAcceleration: CGFloat = 0.0
     
+    //Names of images used in game
     var PLAYER_IMAGE = "dog"
     var POINT_ITEM_IMAGE = "Ball"
     var POINT_ITEM_SPECIAL_IMAGE = "BallSpecial"
@@ -49,14 +54,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var PLATFORM_SPECIAL_IMAGE = "ground_sand_broken"
     var SIDE_FLARE_IMAGE = "cactus"
     
+    // Required Init
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
     
+    // Init that creates initial view of game scene
+    // Resets necessary variables and nodes when restarting game
     override init(size: CGSize) {
         super.init(size: size)
-        
-        print("init")
         
         maxPlayerY = 80
         GameState.sharedInstance.score = 0
@@ -135,6 +141,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
     }
     
+    // Run a sequence that creates a set of all game pieces to make the game scroll infinitely
     func createGamePieces() {
     
         let create = SKAction.run { [unowned self] in
@@ -152,6 +159,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     }
     
+    // Create the player with appropriate physics body
+    // Returns SKNode
     func createPlayer() -> SKNode {
         let playerNode = SKNode()
         playerNode.position = CGPoint(x: self.size.width / 2, y: 80.0)
@@ -175,6 +184,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         return playerNode
     }
     
+    // Create a random number of point items between 0 and 5 in a 500 height range
     func createPointItems() {
         
         let randX = GKRandomDistribution(lowestValue: Int(self.frame.minX) + 20, highestValue: Int(self.frame.maxX) - 80)
@@ -194,6 +204,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
     }
     
+    // Create a platform at a random x and random reachable y
     func createPlatforms() {
         
         let scaleDifficulty:CGFloat = (0.1 * (CGFloat)(nodeLevel))
@@ -214,6 +225,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
     }
     
+    // Select a random integer from array containing probabilities
+    // Probabilities reflect the chance of their index being chosen
+    // Returns Int
     func randomNumber(probabilities: [Double]) -> Int {
         
         let sum = probabilities.reduce(0, +)
@@ -232,18 +246,19 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
     }
     
+    // Start game if touch to start message is displayed otherwise do nothing
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         
         if player.physicsBody!.isDynamic {
-            for touch in touches {
-                let location = touch.location(in: self)
-                if (location.x < self.frame.size.width/2) {
-                    player.position = CGPoint(x: player.position.x - 30.0, y: player.position.y)
-                }
-                else {
-                    player.position = CGPoint(x: player.position.x + 30.0, y: player.position.y)
-                }
-            }
+//            for touch in touches {
+//                let location = touch.location(in: self)
+//                if (location.x < self.frame.size.width/2) {
+//                    player.position = CGPoint(x: player.position.x - 30.0, y: player.position.y)
+//                }
+//                else {
+//                    player.position = CGPoint(x: player.position.x + 30.0, y: player.position.y)
+//                }
+//            }
             return
         }
         
@@ -253,6 +268,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
     }
     
+    // Given a position and type creates a point item of specified type at specified location
+    // Returns PointNode
     func createPointAtPosition(position: CGPoint, type: PointItemType) -> PointNode {
         
         let node = PointNode()
@@ -279,6 +296,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
     }
     
+    // Given a position and type creates a platform of specified type at specified location
+    // Returns PlatformNode
     func createPlatformAtPosition(position: CGPoint, type: PlatformType) -> PlatformNode {
         
         let node = PlatformNode()
@@ -305,6 +324,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         return node
     }
     
+    // When player makes contact with a GameObject perform an action and check to see what object it was
+    // If the object is a point item, reflect that in the score/UI
     func didBegin(_ contact: SKPhysicsContact) {
         
         var updateHUD = false
@@ -319,6 +340,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
     }
     
+    // Series of checks called as the player moves up the screen
     override func update(_ currentTime: TimeInterval) {
         
         if gameOver {
@@ -406,6 +428,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
     }
     
+    // End the game, save the state of the game, show end game scene
     func endGame() {
         
         gameOver = true
@@ -418,6 +441,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
     }
     
+    // Called by accelerometer to move player across X axis
+    // Will place player on opposite side of screen when leaving the screen
     override func didSimulatePhysics() {
         
         player.physicsBody?.velocity = CGVector(dx: xAcceleration * 400.0, dy: player.physicsBody!.velocity.dy)
