@@ -17,6 +17,7 @@ class GameState {
     var equippedItem: String
     var animals: Array<Animal>
     var isPlaying: Bool
+    var owned: Array<Bool>
     
     // Singleton creation
     class var sharedInstance: GameState {
@@ -43,6 +44,7 @@ class GameState {
         pointItems = 0
         equippedItem = "dog"
         isPlaying = false
+        owned = [true, false, false, false, false, false]
         
         // initialize the animal items array
         let dog = Animal(name: "dog", price: 5, owned: true)
@@ -58,6 +60,12 @@ class GameState {
         let defaults = UserDefaults.standard
         highScore = defaults.integer(forKey: "highScore")
         pointItems = defaults.integer(forKey: "pointItems")
+        
+        if (defaults.string(forKey: "equippedItem") != nil) {
+            equippedItem = defaults.string(forKey: "equippedItem")!
+        }
+        owned = defaults.array(forKey: "ownedItems") as! Array<Bool>
+        loadAnimalsOwned()
     }
     
     // Save all the persistent variables to user defaults
@@ -67,8 +75,22 @@ class GameState {
         let defaults = UserDefaults.standard
         defaults.set(highScore, forKey: "highScore")
         defaults.set(pointItems, forKey: "pointItems")
+        defaults.set(owned, forKey: "ownedItems")
+        defaults.set(equippedItem, forKey: "equippedItem")
         
         UserDefaults.standard.synchronize()
+    }
+    
+    // sets the owned values to be saved
+    func setOwned(index: Int) {
+        owned[index] = true
+    }
+    
+    // updates the animal array to have the correct owned booleans
+    func loadAnimalsOwned() {
+        for var i in 0..<animals.count {
+            animals[i].owned = owned[i]
+        }
     }
     
     // changes which item is equipped

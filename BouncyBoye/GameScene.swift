@@ -9,6 +9,7 @@
 import SpriteKit
 import GameplayKit
 import CoreMotion
+import UIKit
 
 class GameScene: SKScene, SKPhysicsContactDelegate {
     
@@ -18,6 +19,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var foregroundNode: SKNode!
     var hudNode: SKNode!
     var player: SKNode!
+    var window: UIWindow?
     
     // Node for tap to start image
     let tapToStartNode = SKSpriteNode(imageNamed: "TapToStart")
@@ -508,6 +510,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         // show the shop button
         GameState.sharedInstance.isPlaying = false
+        //UIApplication.shared.windows[0].rootViewController.showShopBtn()
+        //let viewController = window?.rootViewController as! ViewController
+        //dump(viewController)
     }
     
     // Called by accelerometer to move player across X axis

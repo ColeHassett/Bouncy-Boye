@@ -151,6 +151,7 @@ class ShopController: UIViewController {
         if (index > -1) {
             animals.remove(at: index)
             animals.append(thisAnimal)
+            GameState.sharedInstance.setOwned(index: index)
         }
         
         GameState.sharedInstance.updateAnimals(newAnimals:animals)
