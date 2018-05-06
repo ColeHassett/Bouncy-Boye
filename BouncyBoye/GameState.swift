@@ -16,6 +16,7 @@ class GameState {
     var pointItems: Int
     var equippedItem: String
     var animals: Array<Animal>
+    var isPlaying: Bool
     
     // Singleton creation
     class var sharedInstance: GameState {
@@ -34,7 +35,6 @@ class GameState {
         }
     }
     
-
     // Initialize all variables and user defaults for first time use
     init() {
         
@@ -42,15 +42,16 @@ class GameState {
         highScore = 0
         pointItems = 0
         equippedItem = "dog"
+        isPlaying = false
         
         // initialize the animal items array
-        var dog = Animal(name: "dog", price: 5, owned: true)
-        var duck = Animal(name: "duck", price: 50, owned: false)
-        var monkey = Animal(name: "monkey", price: 100, owned: false)
-        var snake = Animal(name: "snake", price: 200, owned: false)
-        var elephant = Animal(name: "elephant", price: 300, owned: false)
-        var penguin = Animal(name: "penguin", price: 500, owned: false)
-        var animalArray = [dog, duck, monkey, snake, elephant, penguin]
+        let dog = Animal(name: "dog", price: 5, owned: true)
+        let duck = Animal(name: "duck", price: 50, owned: false)
+        let monkey = Animal(name: "monkey", price: 100, owned: false)
+        let snake = Animal(name: "snake", price: 200, owned: false)
+        let elephant = Animal(name: "elephant", price: 300, owned: false)
+        let penguin = Animal(name: "penguin", price: 500, owned: false)
+        let animalArray = [dog, duck, monkey, snake, elephant, penguin]
         
         animals = animalArray
         

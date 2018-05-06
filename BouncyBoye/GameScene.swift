@@ -72,6 +72,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         difficultyLevel = 1
         nextLevelY = 1000.0
         jumpVelocity = 250.0
+        PLAYER_IMAGE = GameState.sharedInstance.equippedItem
         
         backgroundColor = SKColor.black
         scaleFactor = self.size.width / 320
@@ -123,7 +124,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         physicsWorld.gravity = CGVector(dx: 0.0, dy: -2.0)
         physicsWorld.contactDelegate = self
-        
     }
     
     func createBackgroundNode() -> SKNode {
@@ -250,21 +250,24 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         
         if player.physicsBody!.isDynamic {
-//            for touch in touches {
-//                let location = touch.location(in: self)
-//                if (location.x < self.frame.size.width/2) {
-//                    player.position = CGPoint(x: player.position.x - 30.0, y: player.position.y)
-//                }
-//                else {
-//                    player.position = CGPoint(x: player.position.x + 30.0, y: player.position.y)
-//                }
-//            }
+            for touch in touches {
+                let location = touch.location(in: self)
+                if (location.x < self.frame.size.width/2) {
+                    player.position = CGPoint(x: player.position.x - 30.0, y: player.position.y)
+                }
+                else {
+                    player.position = CGPoint(x: player.position.x + 30.0, y: player.position.y)
+                }
+            }
             return
         }
         
         tapToStartNode.removeFromParent()
         player.physicsBody?.isDynamic = true
         player.physicsBody?.applyImpulse(CGVector(dx: 0.0, dy: 35.0))
+        
+        // hide the shop button when the game begins
+        GameState.sharedInstance.isPlaying = false
         
     }
     
@@ -439,6 +442,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let endGameScene = EndGameScene(size: self.size)
         self.view!.presentScene(endGameScene, transition: reveal)
         
+        // show the shop button
+        GameState.sharedInstance.isPlaying = false
     }
     
     // Called by accelerometer to move player across X axis
