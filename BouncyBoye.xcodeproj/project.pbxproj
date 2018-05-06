@@ -54,6 +54,23 @@
 		A32BB282209E4D5600ECF48D /* walrus.png in Resources */ = {isa = PBXBuildFile; fileRef = A32BB265209E4D5600ECF48D /* walrus.png */; };
 		A32BB283209E4D5600ECF48D /* whale.png in Resources */ = {isa = PBXBuildFile; fileRef = A32BB266209E4D5600ECF48D /* whale.png */; };
 		A32BB284209E4D5600ECF48D /* zebra.png in Resources */ = {isa = PBXBuildFile; fileRef = A32BB267209E4D5600ECF48D /* zebra.png */; };
+		A32BB292209E6E3F00ECF48D /* ground_cake_broken.png in Resources */ = {isa = PBXBuildFile; fileRef = A32BB286209E6E3F00ECF48D /* ground_cake_broken.png */; };
+		A32BB293209E6E3F00ECF48D /* ground_cake.png in Resources */ = {isa = PBXBuildFile; fileRef = A32BB287209E6E3F00ECF48D /* ground_cake.png */; };
+		A32BB294209E6E3F00ECF48D /* ground_grass_broken.png in Resources */ = {isa = PBXBuildFile; fileRef = A32BB288209E6E3F00ECF48D /* ground_grass_broken.png */; };
+		A32BB295209E6E3F00ECF48D /* ground_grass.png in Resources */ = {isa = PBXBuildFile; fileRef = A32BB289209E6E3F00ECF48D /* ground_grass.png */; };
+		A32BB296209E6E3F00ECF48D /* ground_sand_broken.png in Resources */ = {isa = PBXBuildFile; fileRef = A32BB28A209E6E3F00ECF48D /* ground_sand_broken.png */; };
+		A32BB297209E6E3F00ECF48D /* ground_sand.png in Resources */ = {isa = PBXBuildFile; fileRef = A32BB28B209E6E3F00ECF48D /* ground_sand.png */; };
+		A32BB298209E6E3F00ECF48D /* ground_snow_broken.png in Resources */ = {isa = PBXBuildFile; fileRef = A32BB28C209E6E3F00ECF48D /* ground_snow_broken.png */; };
+		A32BB299209E6E3F00ECF48D /* ground_snow.png in Resources */ = {isa = PBXBuildFile; fileRef = A32BB28D209E6E3F00ECF48D /* ground_snow.png */; };
+		A32BB29A209E6E3F00ECF48D /* ground_stone_broken.png in Resources */ = {isa = PBXBuildFile; fileRef = A32BB28E209E6E3F00ECF48D /* ground_stone_broken.png */; };
+		A32BB29B209E6E3F00ECF48D /* ground_stone.png in Resources */ = {isa = PBXBuildFile; fileRef = A32BB28F209E6E3F00ECF48D /* ground_stone.png */; };
+		A32BB29C209E6E3F00ECF48D /* ground_wood_broken.png in Resources */ = {isa = PBXBuildFile; fileRef = A32BB290209E6E3F00ECF48D /* ground_wood_broken.png */; };
+		A32BB29D209E6E3F00ECF48D /* ground_wood.png in Resources */ = {isa = PBXBuildFile; fileRef = A32BB291209E6E3F00ECF48D /* ground_wood.png */; };
+		A32BB29F209E7F3A00ECF48D /* bg.png in Resources */ = {isa = PBXBuildFile; fileRef = A32BB29E209E7F3A00ECF48D /* bg.png */; };
+		A32BB2A1209E84A100ECF48D /* cactus.png in Resources */ = {isa = PBXBuildFile; fileRef = A32BB2A0209E84A100ECF48D /* cactus.png */; };
+		A32BB2A3209E853D00ECF48D /* grass.png in Resources */ = {isa = PBXBuildFile; fileRef = A32BB2A2209E853D00ECF48D /* grass.png */; };
+		A32BB2A5209E856000ECF48D /* grass_brown.png in Resources */ = {isa = PBXBuildFile; fileRef = A32BB2A4209E856000ECF48D /* grass_brown.png */; };
+		A32BB2A7209E857F00ECF48D /* spike.png in Resources */ = {isa = PBXBuildFile; fileRef = A32BB2A6209E857F00ECF48D /* spike.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -106,6 +123,23 @@
 		A32BB265209E4D5600ECF48D /* walrus.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = walrus.png; sourceTree = "<group>"; };
 		A32BB266209E4D5600ECF48D /* whale.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = whale.png; sourceTree = "<group>"; };
 		A32BB267209E4D5600ECF48D /* zebra.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = zebra.png; sourceTree = "<group>"; };
+		A32BB286209E6E3F00ECF48D /* ground_cake_broken.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ground_cake_broken.png; sourceTree = "<group>"; };
+		A32BB287209E6E3F00ECF48D /* ground_cake.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ground_cake.png; sourceTree = "<group>"; };
+		A32BB288209E6E3F00ECF48D /* ground_grass_broken.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ground_grass_broken.png; sourceTree = "<group>"; };
+		A32BB289209E6E3F00ECF48D /* ground_grass.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ground_grass.png; sourceTree = "<group>"; };
+		A32BB28A209E6E3F00ECF48D /* ground_sand_broken.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ground_sand_broken.png; sourceTree = "<group>"; };
+		A32BB28B209E6E3F00ECF48D /* ground_sand.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ground_sand.png; sourceTree = "<group>"; };
+		A32BB28C209E6E3F00ECF48D /* ground_snow_broken.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ground_snow_broken.png; sourceTree = "<group>"; };
+		A32BB28D209E6E3F00ECF48D /* ground_snow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ground_snow.png; sourceTree = "<group>"; };
+		A32BB28E209E6E3F00ECF48D /* ground_stone_broken.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ground_stone_broken.png; sourceTree = "<group>"; };
+		A32BB28F209E6E3F00ECF48D /* ground_stone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ground_stone.png; sourceTree = "<group>"; };
+		A32BB290209E6E3F00ECF48D /* ground_wood_broken.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ground_wood_broken.png; sourceTree = "<group>"; };
+		A32BB291209E6E3F00ECF48D /* ground_wood.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ground_wood.png; sourceTree = "<group>"; };
+		A32BB29E209E7F3A00ECF48D /* bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bg.png; sourceTree = "<group>"; };
+		A32BB2A0209E84A100ECF48D /* cactus.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cactus.png; sourceTree = "<group>"; };
+		A32BB2A2209E853D00ECF48D /* grass.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = grass.png; sourceTree = "<group>"; };
+		A32BB2A4209E856000ECF48D /* grass_brown.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = grass_brown.png; sourceTree = "<group>"; };
+		A32BB2A6209E857F00ECF48D /* spike.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = spike.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -138,22 +172,32 @@
 		A304AF4E209CE92E00E54AD3 /* BouncyBoye */ = {
 			isa = PBXGroup;
 			children = (
+				A32BB285209E6E2100ECF48D /* Platforms */,
 				A32BB24A209E4D4600ECF48D /* Characters */,
 				A304AFC0209CEBA500E54AD3 /* Assets.atlas */,
 				A304AFBF209CEBA500E54AD3 /* Backgrounds */,
+				A304AF5C209CE92F00E54AD3 /* Images.xcassets */,
 				A304AF4F209CE92E00E54AD3 /* AppDelegate.swift */,
 				A304AF53209CE92F00E54AD3 /* Actions.sks */,
 				A304AF55209CE92F00E54AD3 /* GameScene.swift */,
 				A304AF57209CE92F00E54AD3 /* GameViewController.swift */,
 				A304AF59209CE92F00E54AD3 /* Main.storyboard */,
+<<<<<<< HEAD
 				84C4795F209E6C83002AA398 /* ShopController.swift */,
 				A304AF5C209CE92F00E54AD3 /* Images.xcassets */,
+=======
+>>>>>>> 5528d09b3d0b3c695bca95b8e06bbea4b08a6730
 				A304AF5E209CE92F00E54AD3 /* LaunchScreen.storyboard */,
 				A304AF61209CE92F00E54AD3 /* Info.plist */,
 				A304AFC6209D08CB00E54AD3 /* Level01.plist */,
 				A304AFC4209CFA6300E54AD3 /* GameObjectNode.swift */,
 				A304AFC8209D119500E54AD3 /* GameState.swift */,
 				A304AFCA209D190E00E54AD3 /* EndGameScene.swift */,
+				A32BB2A0209E84A100ECF48D /* cactus.png */,
+				A32BB2A2209E853D00ECF48D /* grass.png */,
+				A32BB2A4209E856000ECF48D /* grass_brown.png */,
+				A32BB2A6209E857F00ECF48D /* spike.png */,
+				A32BB29E209E7F3A00ECF48D /* bg.png */,
 				A304AFD0209E16DA00E54AD3 /* Ball.png */,
 				A304AFD1209E16DA00E54AD3 /* BallSpecial.png */,
 				84C4795D209E6949002AA398 /* money.png */,
@@ -196,6 +240,25 @@
 				A32BB267209E4D5600ECF48D /* zebra.png */,
 			);
 			name = Characters;
+			sourceTree = "<group>";
+		};
+		A32BB285209E6E2100ECF48D /* Platforms */ = {
+			isa = PBXGroup;
+			children = (
+				A32BB286209E6E3F00ECF48D /* ground_cake_broken.png */,
+				A32BB287209E6E3F00ECF48D /* ground_cake.png */,
+				A32BB288209E6E3F00ECF48D /* ground_grass_broken.png */,
+				A32BB289209E6E3F00ECF48D /* ground_grass.png */,
+				A32BB28A209E6E3F00ECF48D /* ground_sand_broken.png */,
+				A32BB28B209E6E3F00ECF48D /* ground_sand.png */,
+				A32BB28C209E6E3F00ECF48D /* ground_snow_broken.png */,
+				A32BB28D209E6E3F00ECF48D /* ground_snow.png */,
+				A32BB28E209E6E3F00ECF48D /* ground_stone_broken.png */,
+				A32BB28F209E6E3F00ECF48D /* ground_stone.png */,
+				A32BB290209E6E3F00ECF48D /* ground_wood_broken.png */,
+				A32BB291209E6E3F00ECF48D /* ground_wood.png */,
+			);
+			name = Platforms;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -260,21 +323,32 @@
 			files = (
 				A304AF5B209CE92F00E54AD3 /* Main.storyboard in Resources */,
 				A304AF5D209CE92F00E54AD3 /* Images.xcassets in Resources */,
+				A32BB297209E6E3F00ECF48D /* ground_sand.png in Resources */,
 				A32BB276209E4D5600ECF48D /* monkey.png in Resources */,
+				A32BB293209E6E3F00ECF48D /* ground_cake.png in Resources */,
+				A32BB292209E6E3F00ECF48D /* ground_cake_broken.png in Resources */,
 				A32BB278209E4D5600ECF48D /* narwhal.png in Resources */,
+				A32BB29B209E6E3F00ECF48D /* ground_stone.png in Resources */,
+				A32BB299209E6E3F00ECF48D /* ground_snow.png in Resources */,
 				A32BB282209E4D5600ECF48D /* walrus.png in Resources */,
 				A304AFD3209E16DA00E54AD3 /* BallSpecial.png in Resources */,
 				A32BB27E209E4D5600ECF48D /* rabbit.png in Resources */,
 				A304AFC7209D08CB00E54AD3 /* Level01.plist in Resources */,
 				A32BB26D209E4D5600ECF48D /* crocodile.png in Resources */,
+				A32BB2A1209E84A100ECF48D /* cactus.png in Resources */,
 				A32BB27F209E4D5600ECF48D /* rhino.png in Resources */,
 				A304AF60209CE92F00E54AD3 /* LaunchScreen.storyboard in Resources */,
+				A32BB296209E6E3F00ECF48D /* ground_sand_broken.png in Resources */,
 				A32BB281209E4D5600ECF48D /* snake.png in Resources */,
+				A32BB29A209E6E3F00ECF48D /* ground_stone_broken.png in Resources */,
+				A32BB298209E6E3F00ECF48D /* ground_snow_broken.png in Resources */,
 				A32BB26F209E4D5600ECF48D /* elephant.png in Resources */,
 				A32BB283209E4D5600ECF48D /* whale.png in Resources */,
+				A32BB294209E6E3F00ECF48D /* ground_grass_broken.png in Resources */,
 				A32BB26A209E4D5600ECF48D /* chick.png in Resources */,
 				A32BB273209E4D5600ECF48D /* gorilla.png in Resources */,
 				A32BB272209E4D5600ECF48D /* goat.png in Resources */,
+				A32BB29C209E6E3F00ECF48D /* ground_wood_broken.png in Resources */,
 				A32BB277209E4D5600ECF48D /* moose.png in Resources */,
 				A304AFD2209E16DA00E54AD3 /* Ball.png in Resources */,
 				A32BB26B209E4D5600ECF48D /* chicken.png in Resources */,
@@ -282,17 +356,23 @@
 				A32BB271209E4D5600ECF48D /* giraffe.png in Resources */,
 				A32BB27A209E4D5600ECF48D /* panda.png in Resources */,
 				A32BB27C209E4D5600ECF48D /* penguin.png in Resources */,
+				A32BB2A3209E853D00ECF48D /* grass.png in Resources */,
 				A32BB279209E4D5600ECF48D /* owl.png in Resources */,
+				A32BB29D209E6E3F00ECF48D /* ground_wood.png in Resources */,
 				A32BB275209E4D5600ECF48D /* horse.png in Resources */,
 				A32BB26E209E4D5600ECF48D /* duck.png in Resources */,
 				A304AFCF209E122500E54AD3 /* dog.png in Resources */,
 				A32BB270209E4D5600ECF48D /* frog.png in Resources */,
 				A32BB280209E4D5600ECF48D /* sloth.png in Resources */,
+				A32BB295209E6E3F00ECF48D /* ground_grass.png in Resources */,
+				A32BB2A5209E856000ECF48D /* grass_brown.png in Resources */,
 				A32BB26C209E4D5600ECF48D /* cow.png in Resources */,
 				A304AF54209CE92F00E54AD3 /* Actions.sks in Resources */,
 				A32BB27D209E4D5600ECF48D /* pig.png in Resources */,
 				A32BB274209E4D5600ECF48D /* hippo.png in Resources */,
+				A32BB29F209E7F3A00ECF48D /* bg.png in Resources */,
 				A32BB268209E4D5600ECF48D /* bear.png in Resources */,
+				A32BB2A7209E857F00ECF48D /* spike.png in Resources */,
 				A32BB269209E4D5600ECF48D /* buffalo.png in Resources */,
 				84C4795E209E6949002AA398 /* money.png in Resources */,
 				A304AFC2209CEBA500E54AD3 /* Assets.atlas in Resources */,
