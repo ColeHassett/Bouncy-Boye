@@ -42,7 +42,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     let motionManager = CMMotionManager()
     var xAcceleration: CGFloat = 0.0
     
-    let PLAYER_IMAGE = "dog"
+    var PLAYER_IMAGE = "dog"
     let POINT_ITEM_IMAGE = "Ball"
     let POINT_ITEM_SPECIAL_IMAGE = "BallSpecial"
     let PLATFORM_IMAGE = "Platform"

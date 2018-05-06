@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		84C4795E209E6949002AA398 /* money.png in Resources */ = {isa = PBXBuildFile; fileRef = 84C4795D209E6949002AA398 /* money.png */; };
+		84C47960209E6C83002AA398 /* ShopController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84C4795F209E6C83002AA398 /* ShopController.swift */; };
 		A304AF50209CE92E00E54AD3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A304AF4F209CE92E00E54AD3 /* AppDelegate.swift */; };
 		A304AF54209CE92F00E54AD3 /* Actions.sks in Resources */ = {isa = PBXBuildFile; fileRef = A304AF53209CE92F00E54AD3 /* Actions.sks */; };
 		A304AF58209CE92F00E54AD3 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A304AF57209CE92F00E54AD3 /* GameViewController.swift */; };
@@ -55,6 +57,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		84C4795D209E6949002AA398 /* money.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = money.png; sourceTree = "<group>"; };
+		84C4795F209E6C83002AA398 /* ShopController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopController.swift; sourceTree = "<group>"; };
 		A304AF4C209CE92E00E54AD3 /* BouncyBoye.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BouncyBoye.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A304AF4F209CE92E00E54AD3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A304AF53209CE92F00E54AD3 /* Actions.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Actions.sks; sourceTree = "<group>"; };
@@ -142,6 +146,7 @@
 				A304AF55209CE92F00E54AD3 /* GameScene.swift */,
 				A304AF57209CE92F00E54AD3 /* GameViewController.swift */,
 				A304AF59209CE92F00E54AD3 /* Main.storyboard */,
+				84C4795F209E6C83002AA398 /* ShopController.swift */,
 				A304AF5C209CE92F00E54AD3 /* Images.xcassets */,
 				A304AF5E209CE92F00E54AD3 /* LaunchScreen.storyboard */,
 				A304AF61209CE92F00E54AD3 /* Info.plist */,
@@ -151,6 +156,7 @@
 				A304AFCA209D190E00E54AD3 /* EndGameScene.swift */,
 				A304AFD0209E16DA00E54AD3 /* Ball.png */,
 				A304AFD1209E16DA00E54AD3 /* BallSpecial.png */,
+				84C4795D209E6949002AA398 /* money.png */,
 			);
 			path = BouncyBoye;
 			sourceTree = "<group>";
@@ -288,6 +294,7 @@
 				A32BB274209E4D5600ECF48D /* hippo.png in Resources */,
 				A32BB268209E4D5600ECF48D /* bear.png in Resources */,
 				A32BB269209E4D5600ECF48D /* buffalo.png in Resources */,
+				84C4795E209E6949002AA398 /* money.png in Resources */,
 				A304AFC2209CEBA500E54AD3 /* Assets.atlas in Resources */,
 				A32BB284209E4D5600ECF48D /* zebra.png in Resources */,
 				A304AFC1209CEBA500E54AD3 /* Backgrounds in Resources */,
@@ -304,6 +311,7 @@
 				A304AFC3209CF20C00E54AD3 /* GameScene.swift in Sources */,
 				A304AF58209CE92F00E54AD3 /* GameViewController.swift in Sources */,
 				A304AFC9209D119500E54AD3 /* GameState.swift in Sources */,
+				84C47960209E6C83002AA398 /* ShopController.swift in Sources */,
 				A304AFC5209CFA6300E54AD3 /* GameObjectNode.swift in Sources */,
 				A304AFCB209D190E00E54AD3 /* EndGameScene.swift in Sources */,
 				A304AF50209CE92E00E54AD3 /* AppDelegate.swift in Sources */,
