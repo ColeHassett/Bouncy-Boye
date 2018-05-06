@@ -10,12 +10,14 @@ import Foundation
 
 class GameState {
     
+    // Game variables
     var score: Int
     var highScore: Int
     var pointItems: Int
     var equippedItem: String
     var animals: Array<Animal>
     
+    // Singleton creation
     class var sharedInstance: GameState {
         struct Singleton {
             static let instance = GameState()
@@ -32,6 +34,8 @@ class GameState {
         }
     }
     
+
+    // Initialize all variables and user defaults for first time use
     init() {
         
         score = 0
@@ -55,6 +59,7 @@ class GameState {
         pointItems = defaults.integer(forKey: "pointItems")
     }
     
+    // Save all the persistent variables to user defaults
     func saveState() {
         
         highScore = max(score, highScore)

@@ -28,12 +28,14 @@ enum PlatformType: Int {
 
 class GameObjectNode: SKNode {
     
+    // Empty function to be used in subclasses
     func collisionWithPlayer(player: SKNode) -> Bool {
         
         return false
         
     }
     
+    // Remove items from the screen based on relative player distance
     func checkNodeRemoval(playerY: CGFloat) {
         
         if playerY > self.position.y + 300.0 {
@@ -47,9 +49,10 @@ class PointNode: GameObjectNode {
     
     var pointItemType: PointItemType!
     
+    // Add points to players score and currency based on point type
+    // Return Bool
     override func collisionWithPlayer(player: SKNode) -> Bool {
         
-//        player.physicsBody?.velocity = CGVector(dx: player.physicsBody!.velocity.dx, dy: 400.0)
         self.removeFromParent()
         GameState.sharedInstance.score += (pointItemType == .Normal ? 20 : 100)
         GameState.sharedInstance.pointItems += (pointItemType == .Normal ? 1 : 5)
@@ -59,10 +62,13 @@ class PointNode: GameObjectNode {
     
 }
 
+//
 class PlatformNode: GameObjectNode {
     
     var platformType: PlatformType!
     
+    // Move the player up and remove platform if a break type
+    // Return Bool
     override func collisionWithPlayer(player: SKNode) -> Bool {
         
         if (player.physicsBody?.velocity.dy)! < 0 {

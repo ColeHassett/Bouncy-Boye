@@ -12,14 +12,17 @@ import CoreMotion
 
 class GameScene: SKScene, SKPhysicsContactDelegate {
     
+    // Commonly Used Nodes
     var backgroundNode: SKNode!
     var midgroundNode: SKNode!
     var foregroundNode: SKNode!
     var hudNode: SKNode!
     var player: SKNode!
     
+    // Node for tap to start image
     let tapToStartNode = SKSpriteNode(imageNamed: "TapToStart")
     
+    // Initialization of class variables
     var scaleFactor: CGFloat!
     
     var endLevelY = 0
@@ -39,19 +42,25 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     var gameOver = false
     
+    // Accelerometer
     let motionManager = CMMotionManager()
     var xAcceleration: CGFloat = 0.0
     
+    //Names of images used in game
     var PLAYER_IMAGE = "dog"
-    let POINT_ITEM_IMAGE = "Ball"
-    let POINT_ITEM_SPECIAL_IMAGE = "BallSpecial"
-    let PLATFORM_IMAGE = "Platform"
-    let PLATFORM_SPECIAL_IMAGE = "PlatformBreak"
+    var POINT_ITEM_IMAGE = "Ball"
+    var POINT_ITEM_SPECIAL_IMAGE = "BallSpecial"
+    var PLATFORM_IMAGE = "ground_sand"
+    var PLATFORM_SPECIAL_IMAGE = "ground_sand_broken"
+    var SIDE_FLARE_IMAGE = "cactus"
     
+    // Required Init
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
     
+    // Init that creates initial view of game scene
+    // Resets necessary variables and nodes when restarting game
     override init(size: CGSize) {
         super.init(size: size)
         
@@ -62,7 +71,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         nextNodeLevelY = 1000.0
         difficultyLevel = 1
         nextLevelY = 1000.0
-        
+        jumpVelocity = 250.0
         
         backgroundColor = SKColor.black
         scaleFactor = self.size.width / 320
@@ -72,16 +81,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         foregroundNode = SKNode()
         addChild(foregroundNode)
         
-        let create = SKAction.run { [unowned self] in
-            self.createPlatforms()
-            self.createPointItems()
-        }
-        
-        let wait = SKAction.wait(forDuration: 0.5)
-        let sequence = SKAction.sequence([create, wait])
-        let repeatForever = SKAction.repeatForever(sequence)
-        
-        run(repeatForever)
+        createGamePieces()
         
         player = createPlayer()
         foregroundNode.addChild(player)
@@ -111,13 +111,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         motionManager.accelerometerUpdateInterval = 0.2
         
-        motionManager.startAccelerometerUpdates()
-        
-        //        motionManager.startAccelerometerUpdates(to: OperationQueue.current!, withHandler: {
-        //            (accelerometerData: CMAccelerometerData!, error: NSError!) in
-        //            let acceleration = accelerometerData.acceleration
-        //            self.xAcceleration = (CGFloat(acceleration.x)*0.75) + (self.xAcceleration * 0.25)
-        //        })
+        motionManager.startAccelerometerUpdates(to: OperationQueue.current!, withHandler: {_,_ in
+            if let accelerometerData = self.motionManager.accelerometerData {
+                let acceleration = accelerometerData.acceleration
+                self.xAcceleration = (CGFloat(acceleration.x)*0.75) + (self.xAcceleration * 0.25)
+            }
+        })
         
         hudNode.addChild(tapToStartNode)
         addChild(hudNode)
@@ -132,18 +131,36 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let backgroundNode = SKNode()
         let ySpacing = 64.0 * scaleFactor
         
-        for index in 0...19 {
-            let node = SKSpriteNode(imageNamed:String(format: "Background%02d", index+1))
-            node.setScale(scaleFactor)
-            node.anchorPoint = CGPoint(x: 0.5, y: 0.0)
-            node.position = CGPoint(x: self.size.width / 2, y: ySpacing * CGFloat(index))
-            backgroundNode.addChild(node)
-        }
+        let node = SKSpriteNode(imageNamed: "bg")
+        node.setScale(scaleFactor)
+        node.anchorPoint = CGPoint(x: 0.5, y: 0.0)
+        node.position = CGPoint(x: self.size.width / 2, y: ySpacing * CGFloat(nodeLevel-1))
+        backgroundNode.addChild(node)
         
         return backgroundNode
         
     }
     
+    // Run a sequence that creates a set of all game pieces to make the game scroll infinitely
+    func createGamePieces() {
+    
+        let create = SKAction.run { [unowned self] in
+            self.createPlatforms()
+            self.createPointItems()
+            let newNode = self.createBackgroundNode()
+            self.backgroundNode.addChild(newNode)
+        }
+        
+        let wait = SKAction.wait(forDuration: 0.1)
+        let sequence = SKAction.sequence([create, wait])
+        let repeatSequence = SKAction.repeat(sequence, count: 5)
+        
+        run(repeatSequence)
+    
+    }
+    
+    // Create the player with appropriate physics body
+    // Returns SKNode
     func createPlayer() -> SKNode {
         let playerNode = SKNode()
         playerNode.position = CGPoint(x: self.size.width / 2, y: 80.0)
@@ -167,11 +184,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         return playerNode
     }
     
+    // Create a random number of point items between 0 and 5 in a 500 height range
     func createPointItems() {
         
         let randX = GKRandomDistribution(lowestValue: Int(self.frame.minX) + 20, highestValue: Int(self.frame.maxX) - 80)
         let randY = GKRandomDistribution(lowestValue: previousPointsY, highestValue: previousPointsY + 500)
-        let randPointsInArea = Int(arc4random_uniform(5))
+        let randPointsInArea = Int(arc4random_uniform(6))
         
         for _ in 0...randPointsInArea {
             let randomType = randomNumber(probabilities: [0.8, 0.2])
@@ -186,13 +204,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
     }
     
+    // Create a platform at a random x and random reachable y
     func createPlatforms() {
         
         let scaleDifficulty:CGFloat = (0.1 * (CGFloat)(nodeLevel))
         let randX = GKRandomDistribution(lowestValue: Int(self.frame.minX) + 20, highestValue: Int(self.frame.maxX) - 50)
         let xPosition = CGFloat(randX.nextInt())
         
-        let randY = GKRandomDistribution(lowestValue: previousPlatformY + (Int)((0.1 + scaleDifficulty) * jumpVelocity), highestValue: previousPlatformY + (Int)((0.30 + scaleDifficulty) * jumpVelocity))
+        let randY = GKRandomDistribution(lowestValue: previousPlatformY + (Int)((0.1 + scaleDifficulty) * jumpVelocity), highestValue: previousPlatformY + (Int)((0.3 + scaleDifficulty) * jumpVelocity))
         let yPosition = CGFloat(randY.nextInt())
         
         previousPlatformY = Int(yPosition)
@@ -206,6 +225,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
     }
     
+    // Select a random integer from array containing probabilities
+    // Probabilities reflect the chance of their index being chosen
+    // Returns Int
     func randomNumber(probabilities: [Double]) -> Int {
         
         let sum = probabilities.reduce(0, +)
@@ -224,18 +246,19 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
     }
     
+    // Start game if touch to start message is displayed otherwise do nothing
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         
         if player.physicsBody!.isDynamic {
-            for touch in touches {
-                let location = touch.location(in: self)
-                if (location.x < self.frame.size.width/2) {
-                    player.position = CGPoint(x: player.position.x - 30.0, y: player.position.y)
-                }
-                else {
-                    player.position = CGPoint(x: player.position.x + 30.0, y: player.position.y)
-                }
-            }
+//            for touch in touches {
+//                let location = touch.location(in: self)
+//                if (location.x < self.frame.size.width/2) {
+//                    player.position = CGPoint(x: player.position.x - 30.0, y: player.position.y)
+//                }
+//                else {
+//                    player.position = CGPoint(x: player.position.x + 30.0, y: player.position.y)
+//                }
+//            }
             return
         }
         
@@ -245,6 +268,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
     }
     
+    // Given a position and type creates a point item of specified type at specified location
+    // Returns PointNode
     func createPointAtPosition(position: CGPoint, type: PointItemType) -> PointNode {
         
         let node = PointNode()
@@ -271,6 +296,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
     }
     
+    // Given a position and type creates a platform of specified type at specified location
+    // Returns PlatformNode
     func createPlatformAtPosition(position: CGPoint, type: PlatformType) -> PlatformNode {
         
         let node = PlatformNode()
@@ -286,6 +313,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         else {
             sprite = SKSpriteNode(imageNamed: PLATFORM_IMAGE)
         }
+        sprite.setScale(0.2)
         node.addChild(sprite)
         
         node.physicsBody = SKPhysicsBody(rectangleOf: sprite.size)
@@ -296,6 +324,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         return node
     }
     
+    // When player makes contact with a GameObject perform an action and check to see what object it was
+    // If the object is a point item, reflect that in the score/UI
     func didBegin(_ contact: SKPhysicsContact) {
         
         var updateHUD = false
@@ -310,6 +340,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
     }
     
+    // Series of checks called as the player moves up the screen
     override func update(_ currentTime: TimeInterval) {
         
         if gameOver {
@@ -321,6 +352,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             GameState.sharedInstance.score += Int(player.position.y) - maxPlayerY!
             maxPlayerY = Int(player.position.y)
             labelScore.text = "\(GameState.sharedInstance.score)"
+            labelLevel.text = "\(difficultyLevel)"
         }
         
         foregroundNode.enumerateChildNodes(withName: "NODE_PLATFORM", using: {
@@ -358,8 +390,45 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             nextNodeLevelY += (Double)(nodeLevel * 1000)
         }
         
+        // If the player is approaching the top of generated objects, generate more
+        if Int(player.position.y + 500.0) >= previousPlatformY || Int(player.position.y + 500.0) >= previousPointsY {
+            createGamePieces()
+        }
+        
+        // Set images for game pieces based on level
+        switch (nodeLevel) {
+        case 1,2:
+            PLATFORM_IMAGE = "ground_sand"
+            PLATFORM_SPECIAL_IMAGE = "ground_sand_broken"
+            SIDE_FLARE_IMAGE = "cactus"
+            break
+        case 3,4:
+            PLATFORM_IMAGE = "ground_grass"
+            PLATFORM_SPECIAL_IMAGE = "ground_grass_broken"
+            SIDE_FLARE_IMAGE = "grass"
+            break
+        case 5,6:
+            PLATFORM_IMAGE = "ground_wood"
+            PLATFORM_SPECIAL_IMAGE = "ground_wood_broken"
+            SIDE_FLARE_IMAGE = "grass_brown"
+            break
+        case 7,8:
+            PLATFORM_IMAGE = "ground_stone"
+            PLATFORM_SPECIAL_IMAGE = "ground_stone_broken"
+            SIDE_FLARE_IMAGE = "cactus"
+            break
+        case _ where nodeLevel > 8:
+            PLATFORM_IMAGE = "ground_snow"
+            PLATFORM_SPECIAL_IMAGE = "ground_snow_broken"
+            SIDE_FLARE_IMAGE = "spike"
+            break
+        default:
+            break
+        }
+        
     }
     
+    // End the game, save the state of the game, show end game scene
     func endGame() {
         
         gameOver = true
@@ -372,6 +441,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
     }
     
+    // Called by accelerometer to move player across X axis
+    // Will place player on opposite side of screen when leaving the screen
     override func didSimulatePhysics() {
         
         player.physicsBody?.velocity = CGVector(dx: xAcceleration * 400.0, dy: player.physicsBody!.velocity.dy)
