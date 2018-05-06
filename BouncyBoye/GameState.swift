@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 class GameState {
     
@@ -16,7 +17,6 @@ class GameState {
     var pointItems: Int
     var equippedItem: String
     var animals: Array<Animal>
-    var isPlaying: Bool
     var owned: Array<Bool>
     
     // Singleton creation
@@ -27,6 +27,7 @@ class GameState {
         return Singleton.instance
     }
     
+    // structure to store the items 
     struct Animal {
         var name: String, price: Int, owned: Bool
         init(name: String, price: Int, owned: Bool) {
@@ -43,7 +44,6 @@ class GameState {
         highScore = 0
         pointItems = 0
         equippedItem = "dog"
-        isPlaying = false
         owned = [true, false, false, false, false, false]
         
         // initialize the animal items array
@@ -57,6 +57,7 @@ class GameState {
         
         animals = animalArray
         
+        // grab stored values
         let defaults = UserDefaults.standard
         highScore = defaults.integer(forKey: "highScore")
         pointItems = defaults.integer(forKey: "pointItems")
@@ -64,7 +65,9 @@ class GameState {
         if (defaults.string(forKey: "equippedItem") != nil) {
             equippedItem = defaults.string(forKey: "equippedItem")!
         }
-        owned = defaults.array(forKey: "ownedItems") as! Array<Bool>
+        if (defaults.array(forKey: "ownedItems") != nil) {
+            owned = defaults.array(forKey: "ownedItems") as! Array<Bool>
+        }
         loadAnimalsOwned()
     }
     
@@ -96,7 +99,6 @@ class GameState {
     // changes which item is equipped
     func updateEquippedItem(name:String) {
         equippedItem = name
-        // TODO: change character's image to new name
     }
     
     // setter for animals field

@@ -33,9 +33,6 @@
                         <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </view>
                     <navigationItem key="navigationItem" largeTitleDisplayMode="never" id="1CW-qr-op9"/>
-                    <connections>
-                        <outlet property="shopBtn" destination="WEj-bR-cog" id="3MI-QN-9LW"/>
-                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SZV-WD-TEh" sceneMemberID="firstResponder"/>
             </objects>

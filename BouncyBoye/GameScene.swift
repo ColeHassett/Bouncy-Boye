@@ -105,6 +105,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         pointCounterImage.position = CGPoint(x: 25, y: self.size.height-30)
         hudNode.addChild(pointCounterImage)
         
+        // Creates labels in the game's UI for the score and points
         labelPointItems = SKLabelNode(fontNamed: "ChalkboardSE-Bold")
         labelPointItems.fontSize = 30
         labelPointItems.fontColor = SKColor.blue
@@ -230,6 +231,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         return playerNode
     }
     
+    // Creates a new enemy dot at a random position
     func createEnemy() {
         
     
@@ -334,11 +336,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         tapToStartNode.removeFromParent()
         player.physicsBody?.isDynamic = true
-        player.physicsBody?.applyImpulse(CGVector(dx: 0.0, dy: 35.0))
-        
-        // hide the shop button when the game begins
-        GameState.sharedInstance.isPlaying = false
-        
+        player.physicsBody?.applyImpulse(CGVector(dx: 0.0, dy: 35.0))       
     }
     
     // Given a position and type creates a point item of specified type at specified location
@@ -525,8 +523,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             createGamePieces()
         }
         
-        
-        
     }
     
     // End the game, save the state of the game, show end game scene
@@ -539,12 +535,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let reveal = SKTransition.fade(withDuration: 0.5)
         let endGameScene = EndGameScene(size: self.size)
         self.view!.presentScene(endGameScene, transition: reveal)
-        
-        // show the shop button
-        GameState.sharedInstance.isPlaying = false
-        //UIApplication.shared.windows[0].rootViewController.showShopBtn()
-        //let viewController = window?.rootViewController as! ViewController
-        //dump(viewController)
     }
     
     // Called by accelerometer to move player across X axis

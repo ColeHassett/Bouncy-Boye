@@ -12,8 +12,6 @@ import GameplayKit
 
 class GameViewController: UIViewController {
     
-    @IBOutlet weak var shopBtn: UIButton!
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -28,14 +26,6 @@ class GameViewController: UIViewController {
         skView.presentScene(scene)
         
         GameState.sharedInstance.saveState()
-    }
-    
-    func hideShopBtn() {
-        shopBtn.isHidden = true
-    }
-    
-    func showShopBtn() {
-        shopBtn.isHidden = false
     }
     
     override func viewWillAppear(_ animated: Bool) {
