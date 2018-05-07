@@ -2,12 +2,13 @@
 //  ShopController.swift
 //  BouncyBoye
 //
-//  Created by admin on 5/5/18.
+//  Created by Ryan Bower on 5/5/18.
 //  Copyright © 2018 Cole Hassett. All rights reserved.
 //
 
 import UIKit
 
+// The shop's controller holds the UI for the shop screen, and handles its functionality
 class ShopController: UIViewController {
     
     var balance = 0
@@ -154,6 +155,7 @@ class ShopController: UIViewController {
             GameState.sharedInstance.setOwned(index: index)
         }
         
+        // updates the animals data whenever a new one may have been purchased
         GameState.sharedInstance.updateAnimals(newAnimals:animals)
     }
 

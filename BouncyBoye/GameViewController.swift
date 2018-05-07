@@ -10,8 +10,10 @@ import UIKit
 import SpriteKit
 import GameplayKit
 
+// The main view of the application that contains the game scene and points to the shop
 class GameViewController: UIViewController {
     
+    // This is called when the page initially loads, and creates the game scene
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -28,6 +30,7 @@ class GameViewController: UIViewController {
         GameState.sharedInstance.saveState()
     }
     
+    // Used to hide the nav bar on the game screen
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         viewDidLoad()
@@ -36,6 +39,7 @@ class GameViewController: UIViewController {
         self.navigationController?.setNavigationBarHidden(true, animated: animated)
     }
     
+    // Used to show the nav bar on the shop screen
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
