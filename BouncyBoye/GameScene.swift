@@ -28,7 +28,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var scaleFactor: CGFloat!
     
     var endLevelY = 0
-    var previousPlatformY = 200
+    var previousPlatformY = 0
     var previousPointsY = 300
     var previousFlareY = 200
     var previousEnemyY = 1000
