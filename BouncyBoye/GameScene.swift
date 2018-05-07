@@ -41,8 +41,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     var labelScore: SKLabelNode!
     var labelPointItems: SKLabelNode!
-    var labelLevel: SKLabelNode!
-    var labelJump: SKLabelNode!
     
     var gameOver = false
     
@@ -82,7 +80,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         backgroundColor = SKColor.black
         scaleFactor = self.size.width / 320
         
-        backgroundNode = SKNode()
+        backgroundNode = createBackgroundNode()
         addChild(backgroundNode)
         
         midgroundNode = SKNode()
@@ -91,7 +89,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         foregroundNode = SKNode()
         addChild(foregroundNode)
         
-        createGamePieces()
+        createGamePieces(type: "platform")
+        createGamePieces(type: "point")
+        createGamePieces(type: "enemy")
         
         player = createPlayer()
         foregroundNode.addChild(player)
@@ -104,16 +104,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         hudNode.addChild(pointCounterImage)
         
         labelPointItems = SKLabelNode(fontNamed: "ChalkboardSE-Bold")
-        labelPointItems.fontSize = 30
-        labelPointItems.fontColor = SKColor.blue
+        labelPointItems.fontSize = 24
+        labelPointItems.fontColor = SKColor.black
         labelPointItems.position = CGPoint(x: 50, y: self.size.height-40)
         labelPointItems.horizontalAlignmentMode = SKLabelHorizontalAlignmentMode.left
-        labelPointItems.text = "X \(GameState.sharedInstance.pointItems)"
+        labelPointItems.text = "X\(GameState.sharedInstance.pointItems)"
         hudNode.addChild(labelPointItems)
         
         labelScore = SKLabelNode(fontNamed: "ChalkboardSE-Bold")
-        labelScore.fontSize = 30
-        labelScore.fontColor = SKColor.magenta
+        labelScore.fontSize = 24
+        labelScore.fontColor = SKColor.black
         labelScore.position = CGPoint(x: self.size.width-20, y: self.size.height-40)
         labelScore.horizontalAlignmentMode = SKLabelHorizontalAlignmentMode.right
         labelScore.text = "0"
@@ -139,7 +139,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     // Returns SKNode
     func createMidgroundNode() -> SKNode {
         
-        let midgroundNode = SKNode()
+        let mgNode = SKNode()
         let sprite = SKSpriteNode(imageNamed: SIDE_FLARE_IMAGE)
         var anchor: CGPoint!
         var xPosition: CGFloat!
@@ -159,9 +159,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         sprite.anchorPoint = anchor
         sprite.position = CGPoint(x: xPosition, y: CGFloat(previousFlareY))
-        midgroundNode.addChild(sprite)
+        mgNode.addChild(sprite)
+        mgNode.name = "NODE_MIDGROUND"
         
-        return midgroundNode
+        return mgNode
         
     }
     
@@ -169,30 +170,40 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     // Returns SKNode
     func createBackgroundNode() -> SKNode {
         
-        let backgroundNode = SKNode()
+        let bgNode = SKNode()
         let ySpacing = 64.0 * scaleFactor
         
         let node = SKSpriteNode(imageNamed: "bg")
         node.setScale(scaleFactor)
         node.anchorPoint = CGPoint(x: 0.5, y: 0.0)
         node.position = CGPoint(x: self.size.width / 2, y: ySpacing * CGFloat(nodeLevel-1))
-        backgroundNode.addChild(node)
+        bgNode.name = "NODE_BACKGROUND"
+        bgNode.addChild(node)
         
-        return backgroundNode
+        return bgNode
         
     }
     
     // Run a sequence that creates a set of all game pieces to make the game scroll infinitely
-    func createGamePieces() {
+    func createGamePieces(type: String) {
     
         let create = SKAction.run { [unowned self] in
-            self.createPlatforms()
-            self.createPointItems()
-            self.createEnemy()
-            let newBackNode = self.createBackgroundNode()
-            self.backgroundNode.addChild(newBackNode)
-            let newMidNode = self.createMidgroundNode()
-            self.midgroundNode.addChild(newMidNode)
+            
+            switch(type) {
+            case "point":
+                self.createPointItems()
+                break
+            case "platform":
+                self.createPlatforms()
+                let newMidNode = self.createMidgroundNode()
+                self.midgroundNode.addChild(newMidNode)
+                break
+            case "enemy":
+                self.createEnemy()
+                break
+            default:
+                break
+            }
         }
         
         let wait = SKAction.wait(forDuration: 0.1)
@@ -232,10 +243,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
     
         let randX = GKRandomDistribution(lowestValue: Int(self.frame.minX) + 40, highestValue: Int(self.frame.maxX) - 100)
-        let randY = GKRandomDistribution(lowestValue: previousEnemyY, highestValue: previousEnemyY + 500)
+        let randY = GKRandomDistribution(lowestValue: previousEnemyY + 200, highestValue: previousEnemyY + 700)
         
         let yPosition = randY.nextInt()
-        previousEnemyY += yPosition
+        previousEnemyY = yPosition
         
         let node = SKNode()
         let thePosition = CGPoint(x: randX.nextInt(), y: yPosition)
@@ -279,7 +290,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let randX = GKRandomDistribution(lowestValue: Int(self.frame.minX) + 40, highestValue: Int(self.frame.maxX) - 100)
         let xPosition = CGFloat(randX.nextInt())
         
-        let randY = GKRandomDistribution(lowestValue: previousPlatformY + (Int)((0.1 + scaleDifficulty) * jumpVelocity), highestValue: previousPlatformY + (Int)((0.3 + scaleDifficulty) * jumpVelocity))
+        let randY = GKRandomDistribution(lowestValue: previousPlatformY + (Int)(CGFloat(0.2 + (0.04*Double(nodeLevel))) * jumpVelocity),
+                                         highestValue: previousPlatformY + (Int)(CGFloat(0.35 + (0.04*Double(nodeLevel))) * jumpVelocity))
         let yPosition = CGFloat(randY.nextInt())
         
         previousPlatformY = Int(yPosition)
@@ -442,9 +454,23 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             pointItem.checkNodeRemoval(playerY: self.player.position.y)
         })
         
+//        midgroundNode.enumerateChildNodes(withName: "NODE_MIDGROUND", using: {
+//            (node, stop) in
+//            let midground = node
+//            if midground.position.y < self.player.position.y - 1000.0 {
+//                midground.removeFromParent()
+//            }
+//        })
+        
+        foregroundNode.enumerateChildNodes(withName: "NODE_ENEMY", using: {
+            (node, stop) in
+            let enemy = node
+            if enemy.position.y < self.player.position.y - 300.0 {
+                enemy.removeFromParent()
+            }
+        })
+        
         if player.position.y > 200.0 {
-            
-            backgroundNode.position = CGPoint(x: 0.0, y: -((player.position.y - 200.0) / 10))
             midgroundNode.position = CGPoint(x: 0.0, y: -((player.position.y - 200.0)))
             foregroundNode.position = CGPoint(x: 0.0, y: -(player.position.y - 200.0))
         }
@@ -519,11 +545,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
         
         // If the player is approaching the top of generated objects, generate more
-        if Int(player.position.y + 500.0) >= previousPlatformY || Int(player.position.y + 500.0) >= previousPointsY {
-            createGamePieces()
+        if Int(player.position.y + 500.0) >= previousPlatformY {
+            createGamePieces(type: "platform")
         }
         
+        if Int(player.position.y + 500.0) >= previousPointsY {
+            createGamePieces(type: "point")
+        }
         
+        if Int(player.position.y + 500.0) >= previousEnemyY {
+            createGamePieces(type: "enemy")
+        }
         
     }
     

@@ -27,7 +27,7 @@ class EndGameScene: SKScene {
         
         let labelPointItems = SKLabelNode(fontNamed: "ChalkboardSE-Bold")
         labelPointItems.fontSize = 30
-        labelPointItems.fontColor = SKColor.blue
+        labelPointItems.fontColor = SKColor.white
         labelPointItems.position = CGPoint(x: 50, y: self.size.height-40)
         labelPointItems.horizontalAlignmentMode = SKLabelHorizontalAlignmentMode.left
         labelPointItems.text = "X \(GameState.sharedInstance.pointItems)"
@@ -35,7 +35,7 @@ class EndGameScene: SKScene {
         
         let labelScore = SKLabelNode(fontNamed: "ChalkboardSE-Bold")
         labelScore.fontSize = 60
-        labelScore.fontColor = SKColor.blue
+        labelScore.fontColor = SKColor.white
         labelScore.position = CGPoint(x: self.size.width / 2, y: 300)
         labelScore.horizontalAlignmentMode = SKLabelHorizontalAlignmentMode.center
         labelScore.text = "\(GameState.sharedInstance.score)"
@@ -50,8 +50,8 @@ class EndGameScene: SKScene {
         addChild(labelHighScore)
         
         let labelRestart = SKLabelNode(fontNamed: "ChalkboardSE-Bold")
-        labelRestart.fontSize = 30
-        labelRestart.fontColor = SKColor.blue
+        labelRestart.fontSize = 24
+        labelRestart.fontColor = SKColor.white
         labelRestart.position = CGPoint(x: self.size.width / 2, y: 50)
         labelRestart.horizontalAlignmentMode = SKLabelHorizontalAlignmentMode.center
         labelRestart.text = "Tap Anywhere To Try Again"
