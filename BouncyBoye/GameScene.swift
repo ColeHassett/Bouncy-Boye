@@ -9,6 +9,7 @@
 import SpriteKit
 import GameplayKit
 import CoreMotion
+import UIKit
 
 class GameScene: SKScene, SKPhysicsContactDelegate {
     
@@ -18,6 +19,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var foregroundNode: SKNode!
     var hudNode: SKNode!
     var player: SKNode!
+    var window: UIWindow?
     
     // Node for tap to start image
     let tapToStartNode = SKSpriteNode(imageNamed: "TapToStart")
@@ -103,6 +105,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         pointCounterImage.position = CGPoint(x: 25, y: self.size.height-30)
         hudNode.addChild(pointCounterImage)
         
+        // Creates labels in the game's UI for the score and points
         labelPointItems = SKLabelNode(fontNamed: "ChalkboardSE-Bold")
         labelPointItems.fontSize = 24
         labelPointItems.fontColor = SKColor.black
@@ -239,6 +242,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         return playerNode
     }
     
+    // Creates a new enemy dot at a random position
     func createEnemy() {
         
     
@@ -330,25 +334,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         
         if player.physicsBody!.isDynamic {
-            for touch in touches {
-                let location = touch.location(in: self)
-                if (location.x < self.frame.size.width/2) {
-                    player.position = CGPoint(x: player.position.x - 30.0, y: player.position.y)
-                }
-                else {
-                    player.position = CGPoint(x: player.position.x + 30.0, y: player.position.y)
-                }
-            }
             return
         }
         
         tapToStartNode.removeFromParent()
         player.physicsBody?.isDynamic = true
-        player.physicsBody?.applyImpulse(CGVector(dx: 0.0, dy: 35.0))
-        
-        // hide the shop button when the game begins
-        GameState.sharedInstance.isPlaying = false
-        
+        player.physicsBody?.applyImpulse(CGVector(dx: 0.0, dy: 35.0))       
     }
     
     // Given a position and type creates a point item of specified type at specified location
@@ -454,14 +445,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             pointItem.checkNodeRemoval(playerY: self.player.position.y)
         })
         
-//        midgroundNode.enumerateChildNodes(withName: "NODE_MIDGROUND", using: {
-//            (node, stop) in
-//            let midground = node
-//            if midground.position.y < self.player.position.y - 1000.0 {
-//                midground.removeFromParent()
-//            }
-//        })
-        
         foregroundNode.enumerateChildNodes(withName: "NODE_ENEMY", using: {
             (node, stop) in
             let enemy = node
@@ -556,7 +539,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         if Int(player.position.y + 500.0) >= previousEnemyY {
             createGamePieces(type: "enemy")
         }
-        
     }
     
     // End the game, save the state of the game, show end game scene
@@ -569,9 +551,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let reveal = SKTransition.fade(withDuration: 0.5)
         let endGameScene = EndGameScene(size: self.size)
         self.view!.presentScene(endGameScene, transition: reveal)
-        
-        // show the shop button
-        GameState.sharedInstance.isPlaying = false
     }
     
     // Called by accelerometer to move player across X axis
